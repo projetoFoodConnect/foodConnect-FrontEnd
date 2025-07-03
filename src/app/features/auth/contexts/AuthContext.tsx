@@ -1,34 +1,41 @@
-import { createContext, useContext, useState } from 'react'
-import { login as loginRequest, type LoginPayload, type LoginResponse } from '../services/authService'
+import { createContext, useContext, useState, type ReactNode } from 'react'
+import type { LoginPayload } from '../services/authService'
+import { type UserProfile, getUserProfile } from '../services/userService'
+import { loginRequest } from '../services/authService'
+
 
 interface AuthContextType {
-  user: LoginResponse['user'] | null
+  user: UserProfile | null
   isAuthenticated: boolean
   login: (payload: LoginPayload) => Promise<void>
   logout: () => void
 }
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType)
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<LoginResponse['user'] | null>(null)
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<UserProfile | null>(null)
 
   const login = async (payload: LoginPayload) => {
-    const response = await loginRequest(payload)
-    setUser(response.user)
-  }
+  await loginRequest(payload)
+  const perfil = await getUserProfile()
+  setUser(perfil)
+}
 
   const logout = () => {
     setUser(null)
   }
 
-  const isAuthenticated = !!user
-
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
-export const useAuth = () => useContext(AuthContext)
+export function useAuth() {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth deve ser usado dentro de AuthProvider')
+  return ctx
+}
+

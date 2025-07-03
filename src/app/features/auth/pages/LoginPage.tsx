@@ -15,13 +15,16 @@ export default function LoginPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
+
         try {
-            await login({ email, senha })
-            navigate('/dashboard')
-        } catch (err: any) {
-            if (err.response?.status === 401) setError('Senha incorreta.')
-            else if (err.response?.status === 404) setError('Usuário não encontrado.')
-            else setError('Erro ao fazer login.')
+            const response = await login({ email, senha })
+            console.log('Resposta da API:', response)
+
+            loginUser(response.user) // 👈 Isso vem do AuthContext
+            navigate('/') // ou dashboard, dependendo do seu fluxo
+        } catch (error: any) {
+            console.error('Erro ao fazer login:', error)
+            setErro('E-mail ou senha inválidos.')
         }
     }
 

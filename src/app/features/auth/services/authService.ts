@@ -14,14 +14,24 @@ export interface LoginResponse {
     nameUser: string
     email: string
     lastLogin: string
+    perfilUsuario: string
   }
 }
 
-export async function login(payload: LoginPayload): Promise<LoginResponse> {
-  const response = await axios.post(`${API_BASE_URL}/api/user/login`, payload, {
-    withCredentials: true, 
+export interface ProfileResponse {
+  user: {
+    idUsuario: number
+    nome: string
+    email: string
+    perfilUsuario: 'DOADOR' | 'RECEPTOR' | 'ADMINISTRADOR'
+  }
+}
+
+export async function loginRequest(payload: LoginPayload): Promise<void> {
+  console.log('Enviando login:', payload)
+  await axios.post(`${API_BASE_URL}/api/user/login`, payload, {
+    withCredentials: true,
   })
-  return response.data
 }
 
 export interface RegisterPayload {
