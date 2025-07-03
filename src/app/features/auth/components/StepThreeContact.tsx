@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import type { FormDataCadastro } from '../types/auth.types'
 import { registerUser } from '../services/authService'
+import type { FormDataCadastro } from '../types/auth.types'
+import { useNavigate } from 'react-router-dom'
 
 interface StepThreeContactProps {
   formData: FormDataCadastro
@@ -10,85 +10,78 @@ interface StepThreeContactProps {
   onVoltar: () => void
 }
 
-export default function StepThreeContact({
-  formData,
-  atualizarDados,
-  onVoltar
-}: StepThreeContactProps) {
+export default function StepThreeContact({ formData, atualizarDados, onVoltar }: StepThreeContactProps) {
   const [mostrarSenha, setMostrarSenha] = useState(false)
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false)
   const [erro, setErro] = useState('')
   const navigate = useNavigate()
 
   const handleSubmit = async () => {
-    const { nome, email, telefone, senha, confirmarSenha, termosAceitos, perfilUsuario, nomeOrganizacao, endereco } = formData
+    const { nome, email, telefone, senha, confirmarSenha, termosAceitos, endereco } = formData
 
+    // Validação básica
     if (!nome || !email || !telefone || !senha || !confirmarSenha) {
       setErro('Preencha todos os campos obrigatórios.')
       return
     }
+
     if (senha !== confirmarSenha) {
       setErro('As senhas não coincidem.')
       return
     }
+
     if (!termosAceitos) {
       setErro('Você precisa aceitar os termos de uso.')
       return
     }
-    if (!perfilUsuario || !nomeOrganizacao || !endereco) {
-      setErro('Dados de etapas anteriores estão incompletos.')
+
+    if (!endereco?.rua || !endereco?.numero || !endereco?.bairro || !endereco?.cidade || !endereco?.estado) {
+      setErro('Preencha todos os campos de endereço.')
       return
     }
 
-    setErro('')
-
-    const enderecoString = `${endereco.rua}, ${endereco.numero}` +
-      ` - ${endereco.bairro}, ${endereco.cidade}/${endereco.estado}`
+    // Monta endereço como string
+    const enderecoCompleto = `${endereco.rua}, ${endereco.numero} - ${endereco.bairro}, ${endereco.cidade}/${endereco.estado}`
 
     const payload = {
-      nome,
-      email,
-      senha,
-      telefone,
-      endereco: enderecoString,
-      perfilUsuario,
-      nomeOrganizacao
+      ...formData,
+      endereco: enderecoCompleto
     }
 
+    console.log('📦 Enviando payload para API:', payload)
+
     try {
-      await registerUser(payload)
+      const response = await registerUser(payload)
+      console.log('✅ Cadastro realizado com sucesso:', response)
       alert('Conta criada com sucesso!')
-      navigate('/') 
-    } catch (e: any) {
-      console.error('Erro ao cadastrar usuário:', e.response?.data || e.message)
+
+      navigate('/')
+    } catch (error: any) {
+      console.error('❌ Erro ao cadastrar:', error)
       setErro('Erro ao cadastrar. Verifique os dados e tente novamente.')
     }
   }
 
   return (
     <div className="space-y-6">
-      {/* Cabeçalho da etapa */}
       <div>
         <h2 className="text-xl font-semibold">Informações de Contato</h2>
         <p className="text-sm text-gray-500">Dados pessoais</p>
       </div>
 
-      {/* Mensagem de erro */}
       {erro && <p className="text-sm text-red-600">{erro}</p>}
 
       <div className="space-y-4">
-        {/* Nome */}
         <div>
           <label className="text-sm font-medium">Nome Completo *</label>
           <input
             type="text"
             value={formData.nome || ''}
             onChange={(e) => atualizarDados({ nome: e.target.value })}
-            className="w-full mt-1 border rounded-md px-4 py-2 text-sm focus:ring-2 focus:ring-green-600"
+            className="w-full mt-1 border rounded-md px-4 py-2 text-sm"
           />
         </div>
 
-        {/* E-mail e Telefone */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium">E-mail *</label>
@@ -96,7 +89,7 @@ export default function StepThreeContact({
               type="email"
               value={formData.email || ''}
               onChange={(e) => atualizarDados({ email: e.target.value })}
-              className="w-full mt-1 border rounded-md px-4 py-2 text-sm focus:ring-2 focus:ring-green-600"
+              className="w-full mt-1 border rounded-md px-4 py-2 text-sm"
             />
           </div>
           <div>
@@ -106,57 +99,58 @@ export default function StepThreeContact({
               placeholder="(11) 99999-9999"
               value={formData.telefone || ''}
               onChange={(e) => atualizarDados({ telefone: e.target.value })}
-              className="w-full mt-1 border rounded-md px-4 py-2 text-sm focus:ring-2 focus:ring-green-600"
+              className="w-full mt-1 border rounded-md px-4 py-2 text-sm"
             />
           </div>
         </div>
 
-        {/* Senha e Confirmar Senha */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative">
+          <div>
             <label className="text-sm font-medium">Senha *</label>
-            <input
-              type={mostrarSenha ? 'text' : 'password'}
-              placeholder="Mínimo 8 caracteres"
-              value={formData.senha || ''}
-              onChange={(e) => atualizarDados({ senha: e.target.value })}
-              className="w-full mt-1 border rounded-md px-4 py-2 pr-10 text-sm focus:ring-2 focus:ring-green-600"
-            />
-            <button
-              type="button"
-              onClick={() => setMostrarSenha(!mostrarSenha)}
-              className="absolute right-3 top-8 text-gray-500"
-            >
-              {mostrarSenha ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
+            <div className="relative">
+              <input
+                type={mostrarSenha ? 'text' : 'password'}
+                placeholder="Mínimo 8 caracteres"
+                value={formData.senha || ''}
+                onChange={(e) => atualizarDados({ senha: e.target.value })}
+                className="w-full mt-1 border rounded-md px-4 py-2 text-sm pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                className="absolute right-3 top-3 text-gray-500"
+              >
+                {mostrarSenha ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
-          <div className="relative">
+          <div>
             <label className="text-sm font-medium">Confirmar Senha *</label>
-            <input
-              type={mostrarConfirmar ? 'text' : 'password'}
-              placeholder="Digite a senha novamente"
-              value={formData.confirmarSenha || ''}
-              onChange={(e) => atualizarDados({ confirmarSenha: e.target.value })}
-              className="w-full mt-1 border rounded-md px-4 py-2 pr-10 text-sm focus:ring-2 focus:ring-green-600"
-            />
-            <button
-              type="button"
-              onClick={() => setMostrarConfirmar(!mostrarConfirmar)}
-              className="absolute right-3 top-8 text-gray-500"
-            >
-              {mostrarConfirmar ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
+            <div className="relative">
+              <input
+                type={mostrarConfirmar ? 'text' : 'password'}
+                placeholder="Digite a senha novamente"
+                value={formData.confirmarSenha || ''}
+                onChange={(e) => atualizarDados({ confirmarSenha: e.target.value })}
+                className="w-full mt-1 border rounded-md px-4 py-2 text-sm pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setMostrarConfirmar(!mostrarConfirmar)}
+                className="absolute right-3 top-3 text-gray-500"
+              >
+                {mostrarConfirmar ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Termos */}
         <label className="flex items-start gap-2 text-sm text-gray-600">
           <input
             type="checkbox"
             checked={formData.termosAceitos || false}
             onChange={(e) => atualizarDados({ termosAceitos: e.target.checked })}
-            className="mt-1"
           />
           Eu aceito os{' '}
           <a href="#" className="text-green-700 hover:underline font-medium">
@@ -166,11 +160,10 @@ export default function StepThreeContact({
           <a href="#" className="text-green-700 hover:underline font-medium">
             Política de Privacidade
           </a>{' '}
-          do FoodConnect
+          da FoodConnect
         </label>
       </div>
 
-      {/* Botões */}
       <div className="flex justify-between pt-4">
         <button
           type="button"

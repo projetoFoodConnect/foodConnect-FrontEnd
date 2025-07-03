@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormDataCadastro, Endereco } from '../types/auth.types'
 
+
 interface StepTwoOrganizationProps {
   formData: FormDataCadastro
   atualizarDados: (data: Partial<FormDataCadastro>) => void
@@ -16,7 +17,6 @@ export default function StepTwoOrganization({
 }: StepTwoOrganizationProps) {
   const [erro, setErro] = useState('')
 
-  // Garante que 'field' seja uma das chaves definidas em Endereco
   function handleChange<K extends keyof Endereco>(field: K, value: Endereco[K]) {
     atualizarDados({
       endereco: {
@@ -26,7 +26,7 @@ export default function StepTwoOrganization({
     })
   }
 
-  function handleSubmit() {
+  const handleSubmit = () => {
     const { nomeOrganizacao, endereco } = formData
 
     if (
@@ -54,12 +54,12 @@ export default function StepTwoOrganization({
 
       {erro && <p className="text-sm text-red-600">{erro}</p>}
 
-      {/* Nome */}
+      {/* Nome da Organização */}
       <div>
         <label className="text-sm font-medium">Nome da Organização *</label>
         <input
           type="text"
-          placeholder="Ex: Restaurante Sabor & Arte"
+          placeholder="Ex: ONG Esperança"
           value={formData.nomeOrganizacao || ''}
           onChange={(e) => atualizarDados({ nomeOrganizacao: e.target.value })}
           className="w-full mt-1 border rounded-md px-4 py-2 text-sm focus:ring-2 focus:ring-green-600"
