@@ -29,11 +29,11 @@ export interface RegisterPayload {
   email: string
   senha: string
   telefone: string
-  perfilUsuario: string
+  endereco: string
+  perfilUsuario: 'DOADOR' | 'RECEPTOR'
   nomeOrganizacao: string
-  tipoOrganizacao: string
-  endereco: string // campo único com rua, número, bairro, cidade e estado
 }
+
 
 export async function registerUser(payload: RegisterPayload): Promise<{ message: string }> {
   const response = await axios.post(`${API_BASE_URL}/api/user/register`, payload)
