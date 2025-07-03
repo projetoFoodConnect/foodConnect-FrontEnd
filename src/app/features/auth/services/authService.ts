@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL = 'https://foodconnect-api.onrender.com' 
+const API_BASE_URL = 'http://localhost:3000' 
 
 export interface LoginPayload {
   email: string
@@ -18,8 +18,24 @@ export interface LoginResponse {
 }
 
 export async function login(payload: LoginPayload): Promise<LoginResponse> {
-  const response = await axios.post(`${API_BASE_URL}/user/login`, payload, {
+  const response = await axios.post(`${API_BASE_URL}/api/user/login`, payload, {
     withCredentials: true, 
   })
+  return response.data
+}
+
+export interface RegisterPayload {
+  nome: string
+  email: string
+  senha: string
+  telefone: string
+  perfilUsuario: string
+  nomeOrganizacao: string
+  tipoOrganizacao: string
+  endereco: string // campo único com rua, número, bairro, cidade e estado
+}
+
+export async function registerUser(payload: RegisterPayload): Promise<{ message: string }> {
+  const response = await axios.post(`${API_BASE_URL}/api/user/register`, payload)
   return response.data
 }
