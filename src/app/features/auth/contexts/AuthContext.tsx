@@ -5,7 +5,7 @@ import {
   useEffect,
   type ReactNode
 } from 'react'
-import { loginRequest } from '../services/authService'
+import { loginRequest, logoutService } from '../services/authService'
 import { getProfile } from '../services/userService'
 import type { User, LoginPayload } from '../types/auth.types'
 
@@ -28,18 +28,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(userData)
   }
 
-  const logout = () => {
+  const logout = async () => {
+    await logoutService()
     setUser(null)
   }
 
   useEffect(() => {
-    // Tenta buscar o perfil do usuário ao carregar o app (mantém login se o cookie ainda for válido)
     const fetchUser = async () => {
       try {
         const userData = await getProfile()
         setUser(userData)
       } catch (err) {
-        setUser(null) // token inválido ou não logado
+        setUser(null) 
       }
     }
 
@@ -60,7 +60,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 }
 
-// Hook de acesso
 export function useAuth() {
   const context = useContext(AuthContext)
   if (!context) throw new Error('useAuth deve ser usado dentro de AuthProvider')

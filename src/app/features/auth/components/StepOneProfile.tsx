@@ -69,7 +69,7 @@ export default function StepOneProfile({ formData, atualizarDados, onContinuar }
         />
         <CardPerfil
           tipo="RECEPTOR"
-          titulo="Sou Beneficiário"
+          titulo="Sou Receptor"
           descricao={[
             'Buscar produtos disponíveis',
             'Reservar doações',
