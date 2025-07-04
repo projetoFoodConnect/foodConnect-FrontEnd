@@ -1,55 +1,109 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/contexts/AuthContext'
+
 import LoginPage from '../features/auth/pages/LoginPage'
 import RegisterPage from '../features/auth/pages/RegisterPage'
-import AdminDashboard from '../features/dashboard/pages/AdminDashboard'
-import BeneficiarioDashboard from '../features/dashboard/pages/BeneficiarioDashboard'
-import DoadorDashboard from '../features/dashboard/pages/DoadorDashboard'
 
-// function DashboardRouter() {
-//   const { user } = useAuth()
+import { DoadorHome } from '../features/dashboard/doador/pages/DoadorHome'
+import { DoadorProdutos } from '../features/dashboard/doador/pages/DoadorProdutos'
+import { DoadorDoacoes } from '../features/dashboard/doador/pages/DoadorDoacoes'
+import { PrivateRoute } from './PrivateRoute'
+import { ReceptorProdutos } from '../features/dashboard/receptor/pages/ReceptorProdutos'
+import { ReceptorDoacoes } from '../features/dashboard/receptor/pages/ReceptorDoacoes'
+import { ReceptorHome } from '../features/dashboard/receptor/pages/ReceptorHome'
 
-//   if (!user) return <Navigate to="/login" replace />
-
-//   switch (user.perfilUsuario) {
-//     case 'DOADOR':
-//       return <DoadorDashboard />
-//     case 'BENEFICIARIO':
-//       return <BeneficiarioDashboard />
-//     case 'ADMINISTRADOR':
-//       return <AdminDashboard />
-//     default:
-//       return <Navigate to="/login" replace />
-//   }
-// }
 
 export default function AppRoutes() {
-  const { isAuthenticated } = useAuth()
+    const { isAuthenticated, user } = useAuth()
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        isAuthenticated ? <Navigate to="/home" replace /> : <LoginPage />
+                    }
+                />
 
-        <Route
-          path="/login"
-          element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />
-          }
-        />
+                <Route
+                    path="/register"
+                    element={isAuthenticated ? <Navigate to="/home" replace /> : <RegisterPage />}
+                />
 
-        <Route
-          path="/register"
-          element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterPage />
-          }
-        />
+                {/* Redireciona /home conforme o perfil */}
+                <Route
+                    path="/home"
+                    element={
+                        isAuthenticated ? (
+                            user?.perfilUsuario === 'DOADOR' ? (
+                                <Navigate to="/home/doador" replace />
+                            ) : user?.perfilUsuario === 'RECEPTOR' ? (
+                                <Navigate to="/home/beneficiario" replace />
+                            ) : (
+                                <Navigate to="/home/admin" replace />
+                            )
+                        ) : (
+                            <Navigate to="/" replace />
+                        )
+                    }
+                />
 
-        <Route path="/dashboard" element={<DoadorDashboard />} />
+                {/* Rotas do DOADOR */}
+                <Route
+                    path="/home/doador"
+                    element={
+                        <PrivateRoute>
+                            <DoadorHome />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/produtos/doador"
+                    element={
+                        <PrivateRoute>
+                            <DoadorProdutos />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/doacoes/doador"
+                    element={
+                        <PrivateRoute>
+                            <DoadorDoacoes />
+                        </PrivateRoute>
+                    }
+                />
 
-        {/* Qualquer rota inválida */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
-  )
+                {/* Rotas do RECEPTOR */}
+                <Route
+                    path="/home/beneficiario"
+                    element={
+                        <PrivateRoute>
+                            <ReceptorHome />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/produtos/beneficiario"
+                    element={
+                        <PrivateRoute>
+                            <ReceptorProdutos />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/doacoes/beneficiario"
+                    element={
+                        <PrivateRoute>
+                            <ReceptorDoacoes />
+                        </PrivateRoute>
+                    }
+                />
+
+                {/* Fallback */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </BrowserRouter>
+    )
 }
