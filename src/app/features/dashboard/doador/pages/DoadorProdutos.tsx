@@ -24,23 +24,23 @@ export function DoadorProdutos() {
   const [modoForm, setModoForm] = useState(false)
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null)
 
-const carregarProdutos = async () => {
-  try {
-    const data = await listarMeusProdutos()
-    console.log('Produtos do doador:', data) // debug
-    const ordenado = data.sort((a, b) => new Date(b.dataPostagem).getTime() - new Date(a.dataPostagem).getTime())
-    setProdutos(ordenado)
-  } catch (error) {
-    console.error('[DoadorProdutos] Erro ao carregar produtos:', error)
+  const carregarProdutos = async () => {
+    try {
+      const data = await listarMeusProdutos()
+      console.log('Produtos do doador:', data) // debug
+      const ordenado = data.sort((a, b) => new Date(b.dataPostagem).getTime() - new Date(a.dataPostagem).getTime())
+      setProdutos(ordenado)
+      toast.success('Produtos carregados com sucesso!')
+    } catch (error) {
+      console.error('[DoadorProdutos] Erro ao carregar produtos:', error)
+    }
   }
-}
 
 
   useEffect(() => {
     carregarProdutos()
   }, [])
 
-  
 
   const produtosFiltrados = produtos.filter((p) => {
     const matchBusca = p.descricao.toLowerCase().includes(busca.toLowerCase())
@@ -62,15 +62,16 @@ const carregarProdutos = async () => {
 
   const handleAtualizar = async (form: ProdutoForm) => {
     if (!produtoSelecionado) return
-    await atualizarProduto(produtoSelecionado.id, form)
+    await atualizarProduto(produtoSelecionado.idProduto, form)
     await carregarProdutos()
     setModoForm(false)
     setProdutoSelecionado(null)
+    toast.success('Produto atualizado com sucesso!')
   }
 
-  const handleExcluir = async (id: string) => {
+  const handleExcluir = async (idProduto: string) => {
     if (confirm('Tem certeza que deseja excluir este produto?')) {
-      await deletarProduto(id)
+      await deletarProduto(idProduto)
       await carregarProdutos()
     }
   }
@@ -106,25 +107,30 @@ const carregarProdutos = async () => {
 
         {/* Formulário de cadastro/edição */}
         {modoForm && (
-          <ProdutoForme
-            initialData={
-              produtoSelecionado
-                ? {
-                  descricao: produtoSelecionado.descricao,
-                  quantidade: produtoSelecionado.quantidade,
-                  unidade: produtoSelecionado.unidade,
-                  tipo: produtoSelecionado.tipo,
-                  imagem: null
-                }
-                : undefined
-            }
-            onSubmit={produtoSelecionado ? handleAtualizar : handleCadastrar}
-            onCancel={() => {
-              setModoForm(false)
-              setProdutoSelecionado(null)
-            }}
-          />
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white rounded-lg p-6 shadow-xl max-w-xl w-full relative">
+              <button
+                onClick={() => {
+                  setModoForm(false)
+                  setProdutoSelecionado(null)
+                }}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
+              >
+                &times;
+              </button>
+
+              <ProdutoForme
+                initialData={produtoSelecionado ? { ...produtoSelecionado, imagem: null } : undefined}
+                onSubmit={produtoSelecionado ? handleAtualizar : handleCadastrar}
+                onCancel={() => {
+                  setModoForm(false)
+                  setProdutoSelecionado(null)
+                }}
+              />
+            </div>
+          </div>
         )}
+
 
         {/* Grade de produtos */}
         {produtosFiltrados.length === 0 ? (
@@ -139,7 +145,7 @@ const carregarProdutos = async () => {
                 tipo={produto.tipo}
                 quantidade={produto.quantidade}
                 unidade={produto.unidade}
-                reservas={produto._count?.doacoes || 0} 
+                reservas={produto._count?.doacoes || 0}
                 dataCadastro={produto.dataPostagem}
                 status={produto.status}
                 onClick={() => {

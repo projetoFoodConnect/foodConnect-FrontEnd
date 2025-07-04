@@ -114,12 +114,25 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Imagem (opcional)</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
+          <label className="block w-full">
+            <span className="text-sm font-medium block mb-1">Imagem (opcional)</span>
+            <div className="border border-dashed  rounded-md p-2 hover:bg-gray-100 cursor-pointer text-center">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                id="upload-imagem"
+              />
+              <label htmlFor="upload-imagem" className="cursor-pointer text-sm text-green-700 hover:underline">
+                Clique para selecionar uma imagem
+              </label>
+              {form.imagem && (
+                <p className="text-xs text-gray-500 mt-1 truncate">Arquivo: {form.imagem.name}</p>
+              )}
+            </div>
+          </label>
+
 
           {form.imagem && (
             <p className="text-sm text-gray-500 mt-1">
@@ -155,4 +168,8 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
       </div>
     </div>
   )
+}
+
+function onChange(event: ChangeEvent<HTMLInputElement>): void {
+  throw new Error('Function not implemented.')
 }

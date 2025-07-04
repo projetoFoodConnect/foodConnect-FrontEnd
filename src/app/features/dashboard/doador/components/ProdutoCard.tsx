@@ -41,7 +41,7 @@ export function ProdutoCard({
   return (
     <div
       onClick={onClick}
-      className="border rounded-xl p-4 bg-white shadow-sm hover:shadow-md transition cursor-pointer"
+      className=" rounded-xl p-4 bg-white shadow-sm hover:shadow-md transition cursor-pointer"
     >
       <img
         src={imagem || '/sem-imagem.png'}

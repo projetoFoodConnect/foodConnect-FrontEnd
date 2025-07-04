@@ -25,7 +25,6 @@ export function FilterSidebar({ categorias, selectedCategorias, onCategoriaChang
         ))}
       </div>
 
-      {/* Pode adicionar filtro de status se quiser depois */}
     </aside>
   )
 }
