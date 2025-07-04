@@ -22,7 +22,7 @@ export interface Produto {
 
 export type Doacao = {
   idDoacao: number
-  status: 'PLANEJADA' | 'PENDENTE' | 'RECEBIDA'
+  status: 'PLANEJADA' | 'PENDENTE' | 'RECEBIDA' | 'CANCELADA'
   quantidade: number
   dataReserva: string
   dataPlanejada: string
@@ -36,6 +36,7 @@ export type Doacao = {
     email: string
   }
   doador: {
+    idUsuario: number | undefined
     nome: string
     email: string
     nomeOrganizacao: string

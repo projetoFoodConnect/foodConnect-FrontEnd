@@ -1,91 +1,89 @@
 import { useEffect, useState } from 'react'
-import { Pencil, Trash2 } from 'lucide-react'
-import { getMinhasDoacoes, cancelarDoacao, editarDoacao } from '../../../../shared/services/doacaoService'
+import { getMinhasDoacoes, atualizarStatusDoacao } from '../../../../shared/services/doacaoService'
 import type { Doacao } from '../../../../shared/types/shared.types'
-import { formatDate } from '../../../../shared/utils/date'
-import { formatStatusDoacao } from '../../../../shared/utils/formatters'
+import { BadgeCheck, Clock, Hourglass, XCircle, X } from 'lucide-react'
+import { toast } from 'react-toastify'
+import { cn } from '../../../../../lib/utils'
 import { Layout } from '../../../../shared/components/layout/Layout'
 
-export function ReceptorDoacoes() {
+export default function ReceptorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
+  const [loadingId, setLoadingId] = useState<number | null>(null)
 
-  const carregarDoacoes = async () => {
+  const statusInfo = {
+    PLANEJADA: { texto: 'Planejado', cor: 'bg-emerald-100 text-emerald-800', icone: <Clock size={14}/> },
+    PENDENTE:  { texto: 'Pendente',  cor: 'bg-yellow-100 text-yellow-800', icone: <Hourglass size={14}/> },
+    RECEBIDA:  { texto: 'Recebido',  cor: 'bg-green-100 text-green-800', icone: <BadgeCheck size={14}/> },
+    CANCELADA: { texto: 'Cancelado', cor: 'bg-red-100 text-red-800', icone: <XCircle size={14}/> },
+  }
+
+  const carregar = async () => {
+    const { doacoes } = await getMinhasDoacoes()
+    // Transição automática PLANEJADA → PENDENTE
+    const agora = new Date()
+    for (const d of doacoes) {
+      if (d.status === 'PLANEJADA' && new Date(d.dataPlanejada) < agora) {
+        await atualizarStatusDoacao(d.idDoacao, 'PENDENTE')
+      }
+    }
+    const atualizadas = await getMinhasDoacoes()
+    setDoacoes(atualizadas.doacoes)
+  }
+
+  useEffect(() => { carregar() }, [])
+
+  const handleCancelar = async (id: number) => {
+    if (!confirm('Cancelar esta doação?')) return
+    setLoadingId(id)
     try {
-      const data = await getMinhasDoacoes()
-      setDoacoes(data)
-    } catch (err) {
-      console.error('Erro ao buscar doações:', err)
+      await atualizarStatusDoacao(id, 'CANCELADA')
+      toast.success('Doação cancelada.')
+      await carregar()
+    } catch {
+      toast.error('Erro ao cancelar.')
+    } finally {
+      setLoadingId(null)
     }
   }
 
-  useEffect(() => {
-    carregarDoacoes()
-  }, [])
+  return (
+    <Layout>
 
-  const handleCancelar = async (id: string) => {
-    const motivo = prompt('Informe o motivo do cancelamento:')
-    if (!motivo) return
-    await cancelarDoacao(id, motivo)
-    await carregarDoacoes()
-  }
-
-  const handleEditar = async (doacao: Doacao) => {
-    const novaQtd = prompt('Nova quantidade:', doacao.quantidade.toString())
-    const novaData = prompt('Nova data de coleta (aaaa-mm-dd):', doacao.dataColeta.slice(0, 10))
-    if (!novaQtd || !novaData) return
-    await editarDoacao(doacao.id, {
-      quantidade: Number(novaQtd),
-      dataColeta: novaData,
-    })
-    await carregarDoacoes()
-  }
-
- return (
-  <Layout>
-    <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-green-800">Minhas Reservas</h2>
-      <p className="text-sm text-gray-600">Acompanhe suas coletas agendadas e passadas</p>
-
-      {doacoes.length === 0 ? (
-        <p className="text-gray-600">Nenhuma reserva encontrada.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {doacoes.map((d) => (
-            <div
-              key={d.id}
-              className="border rounded-xl p-4 bg-white shadow-sm flex flex-col justify-between"
-            >
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Minhas Doações</h1>
+      <div className="space-y-4">
+        {doacoes.map((d) => {
+          const info = statusInfo[d.status]
+          return (
+            <div key={d.idDoacao}
+              className="flex items-center justify-between bg-white p-4 rounded shadow border">
               <div>
-                <h3 className="font-semibold text-green-800">{d.produtoDescricao}</h3>
-                <p className="text-sm text-gray-600">Qtd: {d.quantidade}</p>
-                <p className="text-sm text-gray-600">Data coleta: {formatDate(d.dataColeta)}</p>
-                <p className="text-sm text-gray-600">Status: {formatStatusDoacao(d.status)}</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Doador: {d.donoNome} ({d.donoOrganizacao})
+                <h2 className="font-semibold">{d.produto.descricao}</h2>
+                <p className="text-sm text-gray-600">
+                  {d.quantidade} {d.produto.unidade} • Coleta: {new Date(d.dataPlanejada).toLocaleDateString()}
                 </p>
               </div>
-
-              {d.status === 'PLANEJADA' && (
-                <div className="flex gap-3 mt-3 text-sm">
+              <div className="flex items-center gap-3">
+                <span className={cn('px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1', info.cor)}>
+                  {info.icone}{info.texto}
+                </span>
+                {/* botão cancelar */}
+                {d.status !== 'RECEBIDA' && d.status !== 'CANCELADA' && (
                   <button
-                    onClick={() => handleEditar(d)}
-                    className="flex items-center gap-1 text-blue-600 hover:underline"
+                    onClick={() => handleCancelar(d.idDoacao)}
+                    disabled={loadingId === d.idDoacao}
+                    className="p-2 rounded hover:bg-gray-100"
+                    title="Cancelar doação"
                   >
-                    <Pencil className="w-4 h-4" /> Editar
+                    <X size={16} className="text-red-600" />
                   </button>
-                  <button
-                    onClick={() => handleCancelar(d.id)}
-                    className="flex items-center gap-1 text-red-600 hover:underline"
-                  >
-                    <Trash2 className="w-4 h-4" /> Cancelar
-                  </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          ))}
-        </div>
-      )}
+          )
+        })}
+      </div>
     </div>
   </Layout>
-)
+  )
 }

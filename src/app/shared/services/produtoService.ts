@@ -16,10 +16,14 @@ export async function listarMeusProdutos(): Promise<Produto[]> {
 // 📦 Listar todos os produtos disponíveis (receptores)
 export async function listarTodosProdutosDisponiveis(): Promise<Produto[]> {
   try {
-    const response = await api.get("/produto/DISPONIVEL")
-    return response.data.produtos
+    console.log('[listarTodosProdutosDisponiveis] Requisição GET /produto/DISPONIVEL')
+    const response = await api.get('/produto/DISPONIVEL', {
+      withCredentials: true,
+    })
+
+    return response.data.produtos // ✅ ajustado para pegar o campo correto
   } catch (error) {
-    console.error("[listarTodosProdutosDisponiveis] Erro:", error)
+    console.error('[listarTodosProdutosDisponiveis] Erro na requisição:', error)
     throw error
   }
 }

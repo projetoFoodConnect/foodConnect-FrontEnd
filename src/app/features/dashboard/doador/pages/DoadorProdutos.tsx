@@ -179,7 +179,11 @@ const handleExcluir = async (idProduto: string) => {
             {/* Modal de Formulário */}
             {modoForm && (
               <ProdutoFormModal
-                produto={produtoSelecionado}
+                produto={
+                  produtoSelecionado
+                    ? { ...produtoSelecionado, imagem: null }
+                    : undefined
+                }
                 onCancel={() => {
                   setModoForm(false)
                   setProdutoSelecionado(null)
