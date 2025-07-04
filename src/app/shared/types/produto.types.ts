@@ -5,5 +5,5 @@ export interface ProdutoForm {
   quantidade: number
   unidade: UnidadeMedida
   tipo: TipoProduto
-  imagem?: File | null
+  imagem: File | null
 }

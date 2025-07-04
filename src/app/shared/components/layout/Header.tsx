@@ -1,95 +1,96 @@
-import {
-    ChevronDown,
-    Heart,
-    Package,
-    UserCircle,
-    Building2,
-    Home,
-    LogOut,
-} from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { LogOut, Heart, Package, Home, ChevronDown, UserCircle } from 'lucide-react'
 import { useAuth } from '../../../features/auth/contexts/AuthContext'
+import { getHomePathByPerfil, getProdutosPathByPerfil, getDoacoesPathByPerfil } from '../../utils/redirectByPerfil'
 
 export function Header() {
-
-    const { logout } = useAuth()
+    const location = useLocation()
     const navigate = useNavigate()
+    const { user, logout } = useAuth()
+
+    if (!user) return null
+
+    const perfil = user.perfilUsuario
+    const nome = user.nome || 'Usuário'
+
+    const rotas = {
+        home: getHomePathByPerfil(perfil),
+        produtos: getProdutosPathByPerfil(perfil),
+        doacoes: getDoacoesPathByPerfil(perfil),
+    }
+
+    const rotaAtiva = (path: string) => location.pathname === path
 
     const handleLogout = async () => {
         await logout()
         navigate('/')
     }
-    const location = useLocation()
 
-    const isActive = (path: string) => {
-        return location.pathname.startsWith(path)
-    }
     return (
-        <header className="bg-white shadow-md">
-            <div className="max-w-screen-xl mx-auto px-4 py-5 flex justify-between items-center">
-
-                {/* Logo */}
-                <div className="flex items-center gap-2 text-green-800 font-bold text-xl">
-                    <Heart className="w-6 h-6 fill-green-800" />
-                    <span>FoodConnect</span>
-                </div>
-
-                {/* Navegação */}
-                <nav className="hidden md:flex items-center gap-6 text-base">
-                    <a
-                        href="/home"
-                        className={`flex items-center gap-1 px-2 py-1 rounded 
-                        ${isActive('/home') ? 'bg-green-50 text-green-800 border border-green-200' : 'text-gray-700 hover:text-green-800'}`}
-                    >
-                        <Home className="w-5 h-5" /> Home
-                    </a>
-                    <a
-                        href="/produtos/doador"
-                        className={`flex items-center gap-1 px-2 py-1 rounded 
-                        ${isActive('/produtos') ? 'bg-green-50 text-green-800 border border-green-200' : 'text-gray-700 hover:text-green-800'}`}
-                    >
-                        <Package className="w-5 h-5" /> Produtos
-                    </a>
-                    <a
-                        href="/doacoes"
-                        className={`flex items-center gap-1 px-2 py-1 rounded
-                        ${isActive('/doacoes') ? 'bg-green-50 text-green-800 border border-green-200' : 'text-gray-700 hover:text-green-800'}`}
-                    >
-                        <Heart className="w-5 h-5" /> Doações
-                    </a>
-                </nav>
-
-                {/* Ações à direita */}
-                <div className="flex items-center gap-4">
-                    {/* Papel do usuário */}
-                    <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
-                        <Building2 className="w-5 h-5" /> Doador
-                    </div>
-
-                    {/* Notificações */}
-                    {/* <div className="relative">
-            <Bell className="w-6 h-6 text-gray-600" />
-            <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-              3
-            </span>
-          </div> */}
-
-                    {/* Usuário */}
-                    <div className="flex items-center gap-1 rounded-full px-2 py-1">
-                        <UserCircle className="w-6 h-6 text-green-800" />
-                        <ChevronDown className="w-4 h-4 text-green-700" />
-                    </div>
-
-                    {/* Botão Sair */}
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-1 text-sm text-gray-600 hover:text-red-600 transition"
-                    >
-                        <LogOut className="w-4 h-4" />
-                        Sair
-                    </button>
-                </div>
+        <header className="w-full bg-white shadow-sm px-6 py-3 flex justify-between items-center">
+            {/* Logo + Marca */}
+            <div
+                className="text-green-800 font-bold text-lg cursor-pointer flex items-center gap-2"
+                onClick={() => navigate(rotas.home)}
+            >
+                <span className="bg-green-100 p-1 rounded-lg">
+                    <Heart className="w-5 h-5 text-green-700" />
+                </span>
+                FoodConnect
             </div>
-        </header >
+
+            {/* Navegação */}
+            <nav className="flex gap-4 items-center">
+                <button
+                    onClick={() => navigate(rotas.home)}
+                    className={`flex items-center gap-1 text-sm px-3 py-1 rounded-md border ${rotaAtiva(rotas.home)
+                            ? 'bg-green-100 text-green-900 border-green-300'
+                            : 'text-gray-700 border-transparent hover:bg-gray-100'
+                        }`}
+                >
+                    <Home size={16} />
+                    Home
+                </button>
+
+                <button
+                    onClick={() => navigate(rotas.produtos)}
+                    className={`flex items-center gap-1 text-sm px-3 py-1 rounded-md border ${rotaAtiva(rotas.produtos)
+                            ? 'bg-green-100 text-green-900 border-green-300'
+                            : 'text-gray-700 border-transparent hover:bg-gray-100'
+                        }`}
+                >
+                    <Package size={16} />
+                    Produtos
+                </button>
+
+                <button
+                    onClick={() => navigate(rotas.doacoes)}
+                    className={`flex items-center gap-1 text-sm px-3 py-1 rounded-md border ${rotaAtiva(rotas.doacoes)
+                            ? 'bg-green-100 text-green-900 border-green-300'
+                            : 'text-gray-700 border-transparent hover:bg-gray-100'
+                        }`}
+                >
+                    <Heart size={16} />
+                    Doações
+                </button>
+            </nav>
+
+            {/* Perfil e Logout */}
+            <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1 rounded-full px-2 py-1">
+                    <UserCircle className="w-6 h-6 text-green-800" />
+                    <ChevronDown className="w-4 h-4 text-green-700" />
+                </div>
+
+                {/* Botão Sair */}
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-1 text-sm text-gray-600 hover:text-red-600 transition"
+                >
+                    <LogOut className="w-4 h-4" />
+                    Sair
+                </button>
+            </div>
+        </header>
     )
 }

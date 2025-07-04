@@ -12,8 +12,8 @@ return (
       <div className="p-6 space-y-8">
         {/* Cabeçalho */}
         <div>
-          <h1 className="text-2xl font-bold text-green-800">
-            Olá, {user?.nome || 'Receptor'}!
+          <h1 className="text-2xl font-bold text-gray-800">
+            Olá, {user?.nome || 'Receptor'}!👋
           </h1>
           <p className="text-gray-600">Encontre e reserve alimentos disponíveis para sua instituição</p>
         </div>

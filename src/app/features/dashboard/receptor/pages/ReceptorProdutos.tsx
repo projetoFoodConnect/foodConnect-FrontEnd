@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Search } from 'lucide-react'
-import { listarProdutosDisponiveisService } from '../../../../shared/services/produtoService'
 import { useAuth } from '../../../auth/contexts/AuthContext'
 import type { Produto } from '../../../../shared/types/shared.types'
 import { Layout } from '../../../../shared/components/layout/Layout'
+import { listarMeusProdutos } from '../../../../shared/services/produtoService'
 
 export function ReceptorProdutos() {
   useAuth()
@@ -14,7 +14,7 @@ export function ReceptorProdutos() {
   useEffect(() => {
     async function fetchProdutos() {
       try {
-        const data = await listarProdutosDisponiveisService()
+        const data = await listarMeusProdutos()
         setProdutos(data)
       } catch (err) {
         console.error('Erro ao buscar produtos disponíveis:', err)

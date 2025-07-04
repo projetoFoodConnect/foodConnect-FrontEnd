@@ -1,40 +1,95 @@
 import api from "../../../lib/api"
 import type { ProdutoForm } from "../types/produto.types"
+import type { Produto } from "../types/shared.types"
 
-// Lista os produtos do usuário logado (DOADOR)
-export const listarMeusProdutosService = async () => {
-  console.log('[listarMeusProdutos] Iniciando requisição GET /produto/user')
-  const response = await api.get('/produto/user')
-  return response.data
-}
-
-// Lista os produtos disponíveis para todos (RECEPTOR)
-export const listarProdutosDisponiveisService = async () => {
-  console.log('[listarProdutosDisponiveis] GET /produto/DISPONIVEL')
-  const response = await api.get('/produto/DISPONIVEL')
-  return response.data
-}
-
-// Cadastra novo produto
-export const cadastrarProdutoService = async (form: ProdutoForm) => {
-  const payload = {
-    ...form,
-    imagem: form.imagem || 'sem imagem',
+// 🔁 Listar produtos do doador autenticado
+export async function listarMeusProdutos(): Promise<Produto[]> {
+  try {
+    const response = await api.get("/produto/user", { withCredentials: true })
+    return response.data.produtos
+  } catch (error) {
+    console.error("[listarMeusProdutos] Erro:", error)
+    throw error
   }
-  console.log('[cadastrarProduto] Enviando payload:', payload)
-  const response = await api.post('/produto/cadastrar', payload)
-  console.log('[cadastrarProduto] Produto cadastrado com sucesso:', response.data)
-  return response.data
 }
 
-// Atualiza um produto
-export const atualizarProdutoService = async (id: number, form: ProdutoForm) => {
-  const response = await api.put(`/produto/${id}`, form)
-  return response.data
+// 📦 Listar todos os produtos disponíveis (receptores)
+export async function listarTodosProdutosDisponiveis(): Promise<Produto[]> {
+  try {
+    const response = await api.get("/produto/DISPONIVEL")
+    return response.data.produtos
+  } catch (error) {
+    console.error("[listarTodosProdutosDisponiveis] Erro:", error)
+    throw error
+  }
 }
 
-// Remove (desativa) um produto
-export const deletarProdutoService = async (id: number) => {
-  const response = await api.put(`/produto/delete/${id}`)
-  return response.data
+// ➕ Cadastrar novo produto
+export async function cadastrarProduto(form: ProdutoForm) {
+  const formData = new FormData()
+  formData.append("descricao", form.descricao)
+  formData.append("quantidade", String(form.quantidade))
+  formData.append("unidade", form.unidade)
+  formData.append("tipo", form.tipo)
+
+  if (form.imagem) {
+    formData.append("imagem", form.imagem)
+  }
+
+  try {
+    const response = await api.post("/produto/cadastrar", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
+    })
+    return response.data
+  } catch (error) {
+    console.error("[cadastrarProduto] Erro:", error)
+    throw error
+  }
+}
+
+// ✏️ Atualizar produto existente
+export async function atualizarProduto(
+  id: string,
+  form: {
+    descricao: string
+    quantidade: number
+    unidade: string
+    tipo: string
+    imagem?: File | null
+  }
+) {
+  const formData = new FormData()
+  formData.append("descricao", form.descricao)
+  formData.append("quantidade", String(form.quantidade))
+  formData.append("unidade", form.unidade)
+  formData.append("tipo", form.tipo)
+
+  if (form.imagem) {
+    formData.append("imagem", form.imagem)
+  }
+
+  try {
+    const response = await api.put(`/produto/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
+    })
+    return response.data
+  } catch (error) {
+    console.error("[atualizarProduto] Erro:", error)
+    throw error
+  }
+}
+
+// 🗑️ Marcar produto como indisponível (soft delete)
+export async function deletarProduto(id: string) {
+  try {
+    const response = await api.put(`/produto/delete/${id}`, null, {
+      withCredentials: true,
+    })
+    return response.data
+  } catch (error) {
+    console.error("[deletarProduto] Erro:", error)
+    throw error
+  }
 }

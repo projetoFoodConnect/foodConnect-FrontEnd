@@ -12,6 +12,7 @@ export function Layout({ children }: LayoutProps) {
       <Header />
       <main className="flex-1 px-4 sm:px-8 py-6 max-w-screen-xl mx-auto w-full">
         {children}
+        
       </main>
       <Footer />
     </div>
