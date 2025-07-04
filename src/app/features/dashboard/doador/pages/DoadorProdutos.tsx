@@ -1,18 +1,21 @@
-import { ProdutoCard } from '../components/ProdutoCard'
+import { useEffect, useState } from 'react'
+import { Layout } from '../../../../shared/components/layout/Layout'
+
 import { ProdutoFiltro } from '../components/ProdutoFiltro'
 import { ProdutoSearch } from '../components/ProdutoSearch'
-import { ProdutoForm } from '../components/ProdutoForm'
+
 import {
   listarMeusProdutos,
   cadastrarProduto,
   atualizarProduto,
   deletarProduto
-} from '../services/produtoService'
-
-import { useEffect, useState } from 'react'
+} from '../../../../shared/services/produtoService'
 
 import type { Produto } from '../../../../shared/types/shared.types'
-import { Layout } from '../../../../shared/components/layout/Layout'
+import { ProdutoCard } from '../components/ProdutoCard'
+import { toast } from 'react-toastify'
+import type { ProdutoForm } from '../../../../shared/types/produto.types'
+import { ProdutoForme } from '../components/ProdutoForme'
 
 export function DoadorProdutos() {
   const [produtos, setProdutos] = useState<Produto[]>([])
@@ -21,19 +24,23 @@ export function DoadorProdutos() {
   const [modoForm, setModoForm] = useState(false)
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null)
 
-  const carregarProdutos = async () => {
-    try {
-      const data = await listarMeusProdutos()
-      const ordenado = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      setProdutos(ordenado)
-    } catch (error) {
-      console.error('[DoadorProdutos] Erro ao carregar produtos:', error)
-    }
+const carregarProdutos = async () => {
+  try {
+    const data = await listarMeusProdutos()
+    console.log('Produtos do doador:', data) // debug
+    const ordenado = data.sort((a, b) => new Date(b.dataPostagem).getTime() - new Date(a.dataPostagem).getTime())
+    setProdutos(ordenado)
+  } catch (error) {
+    console.error('[DoadorProdutos] Erro ao carregar produtos:', error)
   }
+}
+
 
   useEffect(() => {
     carregarProdutos()
   }, [])
+
+  
 
   const produtosFiltrados = produtos.filter((p) => {
     const matchBusca = p.descricao.toLowerCase().includes(busca.toLowerCase())
@@ -41,13 +48,19 @@ export function DoadorProdutos() {
     return matchBusca && matchFiltro
   })
 
-  const handleCadastrar = async (form: any) => {
-    await cadastrarProduto(form)
-    await carregarProdutos()
-    setModoForm(false)
+  const handleCadastrar = async (form: ProdutoForm) => {
+    try {
+      await cadastrarProduto(form)
+      await carregarProdutos()
+      setModoForm(false)
+      toast.success('Produto cadastrado com sucesso!')
+    } catch (error) {
+      console.error('Erro ao cadastrar produto:', error)
+      toast.error('Erro ao cadastrar produto. Tente novamente.')
+    }
   }
 
-  const handleAtualizar = async (form: any) => {
+  const handleAtualizar = async (form: ProdutoForm) => {
     if (!produtoSelecionado) return
     await atualizarProduto(produtoSelecionado.id, form)
     await carregarProdutos()
@@ -65,10 +78,13 @@ export function DoadorProdutos() {
   return (
     <Layout>
       <div className="flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        {/* Cabeçalho */}
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Meus Produtos</h1>
-            <p className="text-sm text-gray-500">Visualize, edite ou remova seus produtos disponíveis.</p>
+            <h1 className="text-2xl font-bold text-green-800">Catálogo de Produtos</h1>
+            <p className="text-sm text-gray-600">
+              Gerencie seus produtos disponíveis para doação
+            </p>
           </div>
 
           <button
@@ -76,30 +92,30 @@ export function DoadorProdutos() {
               setProdutoSelecionado(null)
               setModoForm(true)
             }}
-            className="bg-green-700 text-white font-medium px-4 py-2 rounded hover:bg-green-800"
+            className="bg-green-700 hover:bg-green-800 text-white rounded-md px-4 py-2 font-medium"
           >
             + Novo Produto
           </button>
         </div>
 
-        {/* Busca e Filtro */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        {/* Filtros e busca */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <ProdutoSearch termo={busca} onChange={setBusca} />
           <ProdutoFiltro filtro={filtro} onChange={setFiltro} />
         </div>
 
-        {/* Formulário */}
+        {/* Formulário de cadastro/edição */}
         {modoForm && (
-          <ProdutoForm
+          <ProdutoForme
             initialData={
               produtoSelecionado
                 ? {
-                    descricao: produtoSelecionado.descricao,
-                    quantidade: produtoSelecionado.quantidade,
-                    unidade: produtoSelecionado.unidade,
-                    tipo: produtoSelecionado.tipo,
-                    imagem: null
-                  }
+                  descricao: produtoSelecionado.descricao,
+                  quantidade: produtoSelecionado.quantidade,
+                  unidade: produtoSelecionado.unidade,
+                  tipo: produtoSelecionado.tipo,
+                  imagem: null
+                }
                 : undefined
             }
             onSubmit={produtoSelecionado ? handleAtualizar : handleCadastrar}
@@ -110,24 +126,31 @@ export function DoadorProdutos() {
           />
         )}
 
-        {/* Grid de produtos */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {produtosFiltrados.length === 0 ? (
-            <p className="text-gray-500">Nenhum produto encontrado.</p>
-          ) : (
-            produtosFiltrados.map((produto) => (
+        {/* Grade de produtos */}
+        {produtosFiltrados.length === 0 ? (
+          <p className="text-gray-500">Nenhum produto encontrado.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {produtosFiltrados.map((produto) => (
               <ProdutoCard
                 key={produto.id}
-                produto={produto}
-                onEditar={(p) => {
-                  setProdutoSelecionado(p)
+                imagem={produto.imagem}
+                descricao={produto.descricao}
+                tipo={produto.tipo}
+                quantidade={produto.quantidade}
+                unidade={produto.unidade}
+                reservas={produto._count?.doacoes || 0} 
+                dataCadastro={produto.dataPostagem}
+                status={produto.status}
+                onClick={() => {
+                  setProdutoSelecionado(produto)
                   setModoForm(true)
                 }}
-                onExcluir={handleExcluir}
               />
-            ))
-          )}
-        </div>
+
+            ))}
+          </div>
+        )}
       </div>
     </Layout>
   )

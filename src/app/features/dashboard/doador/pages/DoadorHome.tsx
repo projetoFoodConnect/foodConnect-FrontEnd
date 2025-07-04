@@ -1,8 +1,10 @@
 import { Package, Heart, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Layout } from '../../../../shared/components/layout/Layout'
+import { useAuth } from '../../../auth/contexts/AuthContext'
 
 export function DoadorHome() {
+  const { user } = useAuth()
   const navigate = useNavigate()
 
   return (
@@ -10,8 +12,10 @@ export function DoadorHome() {
       <div className="flex flex-col gap-6">
         {/* Título e saudação */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Olá, Doador 👋</h1>
-          <p className="text-sm text-gray-500">Bem-vindo de volta ao DoaçãoConnect. Aqui está um resumo das suas atividades:</p>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Olá, {user?.nome || 'Doador'}! 👋
+          </h1>
+          <p className="text-sm text-gray-500">Bem-vindo de volta ao FoodConnect. Aqui está um resumo das suas atividades:</p>
         </div>
 
         {/* Cards de resumo */}
