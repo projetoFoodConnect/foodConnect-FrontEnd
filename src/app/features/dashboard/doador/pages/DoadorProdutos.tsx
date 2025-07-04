@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type SetStateAction } from 'react'
 import { Layout } from '../../../../shared/components/layout/Layout'
 
 import { ProdutoFiltro } from '../components/ProdutoFiltro'
@@ -16,6 +16,8 @@ import { ProdutoCard } from '../components/ProdutoCard'
 import { toast } from 'react-toastify'
 import type { ProdutoForm } from '../../../../shared/types/produto.types'
 import { ProdutoForme } from '../components/ProdutoForme'
+import { ProdutoDetalhesModal } from '../components/ProdutoDetalhesModal'
+import { ProdutoFormModal } from '../components/ProdutoFormModal'
 
 export function DoadorProdutos() {
   const [produtos, setProdutos] = useState<Produto[]>([])
@@ -23,6 +25,8 @@ export function DoadorProdutos() {
   const [filtro, setFiltro] = useState<'TODOS' | Produto['tipo']>('TODOS')
   const [modoForm, setModoForm] = useState(false)
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null)
+  const [mostrarDetalhes, setMostrarDetalhes] = useState(false)
+
 
   const carregarProdutos = async () => {
     try {
@@ -75,6 +79,7 @@ export function DoadorProdutos() {
       await carregarProdutos()
     }
   }
+
 
   return (
     <Layout>
@@ -150,11 +155,37 @@ export function DoadorProdutos() {
                 status={produto.status}
                 onClick={() => {
                   setProdutoSelecionado(produto)
-                  setModoForm(true)
+                  setMostrarDetalhes(true)
                 }}
               />
 
             ))}
+
+            {mostrarDetalhes && produtoSelecionado && (
+              <ProdutoDetalhesModal
+                produto={produtoSelecionado}
+                onClose={() => setMostrarDetalhes(false)}
+                onEditar={(p: SetStateAction<Produto | null>) => {
+                  setProdutoSelecionado(p)
+                  setMostrarDetalhes(false)
+                  setModoForm(true)
+                }}
+
+                handleExcluir={handleExcluir}
+              />
+            )}
+
+            {/* Modal de Formulário */}
+            {modoForm && (
+              <ProdutoFormModal
+                produto={produtoSelecionado}
+                onCancel={() => {
+                  setModoForm(false)
+                  setProdutoSelecionado(null)
+                }}
+                onSubmit={produtoSelecionado ? handleAtualizar : handleCadastrar}
+              />
+            )}
           </div>
         )}
       </div>
