@@ -1,98 +1,142 @@
-import { Pencil, Trash2, CheckCircle } from "lucide-react"
-import { useState, useEffect } from "react"
-import { Layout } from "../../../../shared/components/layout/Layout"
-import type { Doacao } from "../../../../shared/types/shared.types"
-import { formatDate } from "../../../../shared/utils/date"
-import { formatStatusDoacao } from "../../../../shared/utils/formatters"
-import { cancelarDoacao, editarDoacao, getMinhasDoacoes, marcarComoRecebida } from "../../../../shared/services/doacaoService"
+import { useEffect, useState } from 'react'
+import { BadgeCheck, Clock, Hourglass, Search } from 'lucide-react'
+import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
+import { cn } from '../../../../../lib/utils'
+import type { Doacao } from '../../../../shared/types/shared.types'
+import { Layout } from '../../../../shared/components/layout/Layout'
 
-export function DoadorDoacoes() {
+
+export default function DoadorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
+  const [busca, setBusca] = useState('')
+  const [filtro, setFiltro] = useState<'TODOS' | 'PLANEJADA' | 'PENDENTE' | 'RECEBIDA'>('TODOS')
 
-  const carregar = async () => {
-    try {
-      const data = await getMinhasDoacoes()
-      const ordenado = data.sort(
-        (a, b) => new Date(b.dataColeta).getTime() - new Date(a.dataColeta).getTime()
-      )
-      setDoacoes(ordenado)
-    } catch (err) {
-      console.error('Erro ao buscar doações:', err)
-    }
+  const statusInfo = {
+    PLANEJADA: {
+      texto: 'Planejado',
+      cor: 'bg-emerald-100 text-emerald-800',
+      icone: <Clock size={14} />,
+    },
+    PENDENTE: {
+      texto: 'Pendente',
+      cor: 'bg-yellow-100 text-yellow-800',
+      icone: <Hourglass size={14} />,
+    },
+    RECEBIDA: {
+      texto: 'Recebido',
+      cor: 'bg-green-100 text-green-800',
+      icone: <BadgeCheck size={14} />,
+    },
   }
+
+const carregarDoacoes = async () => {
+  try {
+    const data = await getMinhasDoacoes()
+    console.log('[DEBUG] Resposta da API:', data)
+    setDoacoes(data.doacoes)
+  } catch (error) {
+    console.error('Erro ao carregar doações:', error)
+  }
+}
 
   useEffect(() => {
-    carregar()
+    carregarDoacoes()
   }, [])
 
-  const handleRecebida = async (id: string) => {
-    await marcarComoRecebida(id)
-    await carregar()
-  }
+  const doacoesFiltradas = doacoes.filter((d) => {
+    const matchBusca =
+      d.produto.descricao.toLowerCase().includes(busca.toLowerCase()) ||
+      d.receptor.nome.toLowerCase().includes(busca.toLowerCase())
 
-  const handleCancelar = async (id: string) => {
-    const motivo = prompt('Informe o motivo do cancelamento:')
-    if (!motivo) return
-    await cancelarDoacao(id, motivo)
-    await carregar()
-  }
-
-  const handleEditar = async (doacao: Doacao) => {
-    const novaQtd = prompt('Nova quantidade:', doacao.quantidade.toString())
-    const novaData = prompt('Nova data (aaaa-mm-dd):', doacao.dataColeta.slice(0, 10))
-    if (!novaQtd || !novaData) return
-    await editarDoacao(doacao.id, {
-      quantidade: Number(novaQtd),
-      dataColeta: novaData
-    })
-    await carregar()
-  }
+    const matchFiltro = filtro === 'TODOS' || d.status === filtro
+    return matchBusca && matchFiltro
+  })
 
   return (
     <Layout>
-      <div className="flex flex-col gap-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">Minhas Doações</h1>
-          <p className="text-sm text-gray-500">Acompanhe suas doações e atualize seu status.</p>
-        </div>
 
-        {doacoes.length === 0 ? (
-          <p className="text-gray-500">Nenhuma doação encontrada.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {doacoes.map((d) => (
-              <div key={d.id} className="border rounded-xl p-4 bg-white shadow-sm">
-                <h3 className="text-lg font-bold text-green-800">{d.produtoDescricao}</h3>
-                <p className="text-sm text-gray-600">Quantidade: {d.quantidade}</p>
-                <p className="text-sm text-gray-600">Data de coleta: {formatDate(d.dataColeta)}</p>
-                <p className="text-sm text-gray-500">Status: {formatStatusDoacao(d.status)}</p>
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        <h1 className="text-2xl font-bold mb-1">Gestão de Doações</h1>
+        <p className="text-sm text-muted-foreground mb-6">
+          Acompanhe e gerencie todas as suas atividades de doação
+        </p>
 
-                <div className="flex gap-2 mt-3">
-                  <button
-                    onClick={() => handleEditar(d)}
-                    className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
-                  >
-                    <Pencil className="w-4 h-4" /> Editar
-                  </button>
-                  <button
-                    onClick={() => handleCancelar(d.id)}
-                    className="flex items-center gap-1 text-sm text-red-600 hover:underline"
-                  >
-                    <Trash2 className="w-4 h-4" /> Cancelar
-                  </button>
-                  {d.status === 'PLANEJADA' && (
-                    <button
-                      onClick={() => handleRecebida(d.id)}
-                      className="flex items-center gap-1 text-sm text-green-700 hover:underline"
-                    >
-                      <CheckCircle className="w-4 h-4" /> Marcar como recebida
-                    </button>
-                  )}
-                </div>
-              </div>
+        {/* Filtros e busca */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+          <div className="flex gap-2 flex-wrap">
+            {(['TODOS', 'PLANEJADA', 'PENDENTE', 'RECEBIDA'] as const).map((status) => (
+              <button
+                key={status}
+                className={cn(
+                  'px-4 py-1 rounded-full border text-sm',
+                  filtro === status
+                    ? 'bg-green-600 text-white border-green-700'
+                    : 'bg-white text-gray-600 hover:bg-gray-100'
+                )}
+                onClick={() => setFiltro(status)}
+              >
+                {status === 'TODOS' ? 'Todos' : statusInfo[status].texto}
+              </button>
             ))}
           </div>
-        )}
+
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <input
+              type="text"
+              placeholder="Buscar por produto, organização..."
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              className="pl-10 pr-4 py-2 border rounded-full text-sm w-full"
+            />
+          </div>
+        </div>
+
+        {/* Lista de doações */}
+        <div className="grid gap-4">
+          {doacoesFiltradas.length === 0 ? (
+            <p className="text-sm text-gray-500 text-center">Nenhuma doação encontrada.</p>
+          ) : (
+            doacoesFiltradas.map((d) => {
+              const status = statusInfo[d.status as keyof typeof statusInfo]
+
+              return (
+                <div key={d.idDoacao} className="flex gap-4 bg-white rounded-lg shadow-sm border p-4">
+                  <img
+                    src="/sem-imagem.png"
+                    alt={d.produto.descricao}
+                    className="w-24 h-24 object-cover rounded-md border"
+                  />
+
+                  <div className="flex-1">
+                    <h2 className="text-lg font-semibold text-green-800">{d.produto.descricao}</h2>
+
+                    <p className="text-sm text-gray-600">
+                      {d.quantidade} {d.produto.unidade} • Coleta:{' '}
+                      {new Date(d.dataPlanejada).toLocaleDateString('pt-BR')}
+                    </p>
+
+                    <p className="text-sm text-gray-500 mt-1">
+                      Destinado a: {d.receptor.nome || 'Organização desconhecida'}
+                    </p>
+
+                    <p className="text-xs text-gray-400">
+                      Registrado em {new Date(d.dataReserva).toLocaleDateString('pt-BR')}
+                    </p>
+                  </div>
+
+                  <div
+                    className={`px-3 py-1 text-xs font-medium rounded-full self-start ${status.cor}`}
+                  >
+                    <span className="flex items-center gap-1">
+                      {status.icone} {status.texto}
+                    </span>
+                  </div>
+                </div>
+              )
+            })
+          )}
+        </div>
       </div>
     </Layout>
   )

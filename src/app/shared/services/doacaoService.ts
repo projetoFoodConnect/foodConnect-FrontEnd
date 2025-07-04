@@ -1,19 +1,23 @@
 import api from "../../../lib/api"
 import type { Doacao } from "../types/shared.types"
 
-export const getMinhasDoacoes = async (): Promise<Doacao[]> => {
-  const { data } = await api.get('/doacoes/user')
-  return data
+type MinhasDoacoesResponse = {
+  doacoes: Doacao[]
 }
 
-export const editarDoacao = async (id: string, payload: Partial<Doacao>) => {
-  await api.put(`/doacao/${id}`, payload)
+export async function getMinhasDoacoes(): Promise<MinhasDoacoesResponse> {
+  const response = await api.get('/doacoes/user', { withCredentials: true })
+  return response.data 
 }
 
-export const cancelarDoacao = async (id: string, justificativa: string) => {
-  await api.put(`/doacao/${id}/cancelar`, { justificativa })
+export const editarDoacao = async (idDoacao: string, payload: Partial<Doacao>) => {
+  await api.put(`/doacao/${idDoacao}`, payload)
 }
 
-export const marcarComoRecebida = async (id: string) => {
-  await api.put(`/doacao/${id}/recebida`)
+export const cancelarDoacao = async (idDoacao: string, justificativa: string) => {
+  await api.put(`/doacao/${idDoacao}/cancelar`, { justificativa })
+}
+
+export const marcarComoRecebida = async (idDoacao: string) => {
+  await api.put(`/doacao/${idDoacao}/recebida`)
 }

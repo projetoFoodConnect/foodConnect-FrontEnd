@@ -1,5 +1,4 @@
-import type { ReactNode } from "react"
-import type { UnidadeMedida, TipoProduto, StatusDoacao } from "./enums"
+import type { UnidadeMedida, TipoProduto } from "./enums"
 
 
 export interface Produto {
@@ -21,16 +20,24 @@ export interface Produto {
   donoOrganizacao?: string
 }
 
-export interface Doacao {
-  donoNome: ReactNode
-  donoOrganizacao: ReactNode
-  id: string
-  produtoId: string
-  produtoDescricao: string
+export type Doacao = {
+  idDoacao: number
+  status: 'PLANEJADA' | 'PENDENTE' | 'RECEBIDA'
   quantidade: number
-  dataColeta: string
-  status: StatusDoacao
-  justificativaCancelamento?: string
-  doadorId: string
-  receptorId: string
+  dataReserva: string
+  dataPlanejada: string
+  produto: {
+    descricao: string
+    tipo: string
+    unidade: string
+  }
+  receptor: {
+    nome: string
+    email: string
+  }
+  doador: {
+    nome: string
+    email: string
+    nomeOrganizacao: string
+  }
 }
