@@ -3,7 +3,12 @@ import type { UnidadeMedida, TipoProduto, StatusDoacao } from "./enums"
 
 
 export interface Produto {
-  [x: string]: string
+  _count: any
+  idProduto: string
+  dataPostagem: string
+  status: string
+  doacoes: any
+  imagem: string
   id: string
   descricao: string
   quantidade: number

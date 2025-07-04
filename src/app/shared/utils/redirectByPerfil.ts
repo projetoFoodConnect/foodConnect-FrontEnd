@@ -36,3 +36,25 @@ export function getDoacoesPathByPerfil(perfil: string): string {
       return '/'
   }
 }
+
+export function getPathByPerfil(perfil: string, base: 'home' | 'produtos' | 'doacoes') {
+  const mapa: Record<string, Record<string, string>> = {
+    DOADOR: {
+      home: '/home/doador',
+      produtos: '/produtos/doador',
+      doacoes: '/doacoes/doador',
+    },
+    RECEPTOR: {
+      home: '/home/beneficiario',
+      produtos: '/produtos/beneficiario',
+      doacoes: '/doacoes/beneficiario',
+    },
+    ADMINISTRADOR: {
+      home: '/home/admin',
+      produtos: '/produtos/admin',
+      doacoes: '/doacoes/admin',
+    },
+  }
+
+  return mapa[perfil]?.[base] || '/'
+}
