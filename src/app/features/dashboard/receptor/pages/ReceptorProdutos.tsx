@@ -48,7 +48,6 @@ export default function ReceptorProdutos() {
 
   return (
     <Layout>
-
     <div className="max-w-6xl mx-auto px-6 py-8">
       <h1 className="text-2xl font-bold mb-1">Produtos Disponíveis</h1>
       <p className="text-sm text-muted-foreground mb-6">Escolha um produto para reservar</p>
@@ -62,7 +61,7 @@ export default function ReceptorProdutos() {
           produtos.map((produto) => (
             <div
               key={produto.idProduto}
-              className="border rounded-xl p-4 bg-white shadow-sm hover:shadow-md transition"
+              className="rounded-xl p-4 bg-white shadow-sm hover:shadow-md transition"
             >
               <img
                 src={produto.imagem || '/sem-imagem.png'}

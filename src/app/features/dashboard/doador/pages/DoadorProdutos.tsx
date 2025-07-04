@@ -113,7 +113,7 @@ const handleExcluir = async (idProduto: string) => {
 
         {/* Formulário de cadastro/edição */}
         {modoForm && (
-          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="fixed inset-0 z-50  bg-opacity-50 flex justify-center items-center">
             <div className="bg-white rounded-lg p-6 shadow-xl max-w-xl w-full relative">
               <button
                 onClick={() => {
