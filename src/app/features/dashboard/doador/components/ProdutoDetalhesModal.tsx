@@ -1,16 +1,18 @@
-import { Modal } from '@/components/ui/modal'
-import { Button } from '@/components/ui/button'
-import { BadgeCheck, XCircle, Eye, Pencil, Trash2 } from 'lucide-react'
+import { BadgeCheck, XCircle, CalendarDays, Package, Pencil, Trash2, X } from 'lucide-react'
 import type { Produto } from '../../../../shared/types/shared.types'
+import type { JSX } from 'react'
 
-interface ProdutoDetalhesModalProps {
-  produto: Produto
+
+interface Props {
+  produto: Produto | null
   onClose: () => void
   onEditar: (produto: Produto) => void
-  onExcluir: (produto: Produto) => void
+  onExcluir: (id: string) => void
 }
 
-export function ProdutoDetalhesModal({ produto, onClose, onEditar, onExcluir }: ProdutoDetalhesModalProps) {
+export function ProdutoDetalhesModal({ produto, onClose, onEditar, onExcluir }: Props) {
+  if (!produto) return null
+
   const formatarData = (data: string) =>
     new Date(data).toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -18,91 +20,91 @@ export function ProdutoDetalhesModal({ produto, onClose, onEditar, onExcluir }: 
       year: 'numeric',
     })
 
-  const statusLabel = {
-    DISPONIVEL: { texto: 'Disponível para doação', cor: 'text-green-600', icone: <BadgeCheck size={16} /> },
-    INDISPONIVEL: { texto: 'Indisponível', cor: 'text-gray-500', icone: <XCircle size={16} /> },
-    DOADO: { texto: 'Produto doado', cor: 'text-blue-600', icone: <Eye size={16} /> },
-  }
+const statusInfo: Record<'DISPONIVEL' | 'INDISPONIVEL' | 'DOADO', { texto: string; cor: string; icon: JSX.Element }> = {
+  DISPONIVEL: { texto: 'Disponível', cor: 'text-green-600', icon: <BadgeCheck size={18} /> },
+  INDISPONIVEL: { texto: 'Indisponível', cor: 'text-gray-500', icon: <XCircle size={18} /> },
+  DOADO: { texto: 'Doado', cor: 'text-blue-600', icon: <CalendarDays size={18} /> },
+}
 
-  const statusAtual = statusLabel[produto.status as keyof typeof statusLabel] || {
-    texto: 'Status desconhecido',
-    cor: 'text-red-600',
-    icone: <XCircle size={16} />,
-  }
+const status = statusInfo[produto.status as keyof typeof statusInfo] || {
+  texto: 'Desconhecido',
+  cor: 'text-red-600',
+  icon: <XCircle size={18} />,
+}
+
 
   return (
-    <Modal onClose={onClose} title="Detalhes do Produto">
-      <div className="flex flex-col lg:flex-row gap-6">
-        <div className="flex-1">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4">
+      <div className="bg-white rounded-xl max-w-md w-full p-6 relative shadow-lg">
+        {/* Botão de fechar */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-500 hover:text-red-600"
+        >
+          <X size={20} />
+        </button>
+
+        {/* Título */}
+        <div className="flex items-center gap-2 mb-4">
+          <Package className="text-green-700" />
+          <h2 className="text-xl font-semibold text-green-800">Detalhes do Produto</h2>
+        </div>
+
+        {/* Conteúdo */}
+        <div className="space-y-3">
           <img
             src={produto.imagem || '/sem-imagem.png'}
             alt={produto.descricao}
-            className="w-full h-60 object-cover rounded-md"
+            className="w-full h-48 object-cover rounded-md"
           />
 
-          <div className="mt-4 bg-green-50 p-4 rounded-lg">
-            <h3 className="text-sm font-bold text-gray-800">Informações Básicas</h3>
-            <p className="text-sm text-gray-600">ID do Produto: <strong>#{produto.id}</strong></p>
-            <p className="text-sm text-gray-600">Categoria: <span className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">{produto.tipo}</span></p>
-            <p className="text-sm text-gray-600">Quantidade: <strong>{produto.quantidade} {produto.unidade}</strong></p>
+          <div>
+            <p className="text-sm text-gray-500">Descrição:</p>
+            <p className="font-medium text-gray-800">{produto.descricao}</p>
           </div>
 
-          <div className="mt-4 bg-white p-4 rounded-lg border">
-            <h3 className="text-sm font-bold text-gray-800">Status Atual</h3>
-            <p className={`text-sm mt-1 font-medium flex items-center gap-2 ${statusAtual.cor}`}>
-              {statusAtual.icone} {statusAtual.texto}
+          <div className="flex items-center gap-4 text-sm text-gray-600">
+            <p>
+              Quantidade: <span className="font-medium">{produto.quantidade}</span>
             </p>
-            <p className="text-xs text-gray-500 mt-1">Atualizado em {formatarData(produto.createdAt)}</p>
+            <p>
+              Unidade: <span className="font-medium">{produto.unidade}</span>
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <p>Tipo:</p>
+            <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-medium">
+              {produto.tipo}
+            </span>
+          </div>
+
+          <div className="text-sm text-gray-600">
+            <p>Cadastrado em: {formatarData(produto.dataPostagem)}</p>
+          </div>
+
+          <div className={`flex items-center gap-2 text-sm font-medium ${status.cor}`}>
+            {status.icon}
+            {status.texto}
           </div>
         </div>
 
-        <div className="flex-1 space-y-4">
-          <div>
-            <h2 className="text-xl font-bold text-gray-800">{produto.descricao}</h2>
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <BadgeCheck size={16} className="text-blue-600" />
-              <div>
-                <p className="text-sm font-semibold">Data de Cadastro</p>
-                <p className="text-sm text-gray-600">{formatarData(produto.createdAt)}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <BadgeCheck size={16} className="text-green-600" />
-              <div>
-                <p className="text-sm font-semibold">Quantidade Cadastrada</p>
-                <p className="text-sm text-gray-600">{produto.quantidade} {produto.unidade} disponíveis para doação</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 space-y-2">
-            <h3 className="text-sm font-bold text-gray-800">Reservas e Interesse</h3>
-            <div className="flex items-center gap-2">
-              <Eye size={16} className="text-purple-600" />
-              <div>
-                <p className="text-sm font-semibold">Reservas Ativas</p>
-                <p className="text-sm text-gray-600">3 pessoas interessadas</p>
-              </div>
-            </div>
-            <p className="text-xs text-purple-800 bg-purple-100 px-3 py-2 rounded-lg">
-              Este produto tem interesse de beneficiários. Entre em contato com os interessados para coordenar a doação.
-            </p>
-          </div>
-
-          <div className="flex gap-2 mt-6">
-            <Button onClick={() => onEditar(produto)} variant="default" className="flex items-center gap-2">
-              <Pencil size={16} /> Editar Produto
-            </Button>
-            <Button onClick={() => onExcluir(produto)} variant="destructive" className="flex items-center gap-2">
-              <Trash2 size={16} /> Excluir
-            </Button>
-          </div>
+        {/* Botões */}
+        <div className="flex justify-between mt-6">
+          <button
+            onClick={() => onExcluir(produto.idProduto)}
+            className="flex items-center gap-1 px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
+          >
+            <Trash2 size={16} /> Excluir
+          </button>
+          <button
+            onClick={() => onEditar(produto)}
+            className="flex items-center gap-1 px-4 py-2 text-sm text-white bg-green-700 rounded hover:bg-green-800"
+          >
+            <Pencil size={16} /> Editar
+          </button>
         </div>
       </div>
-    </Modal>
+    </div>
   )
 }

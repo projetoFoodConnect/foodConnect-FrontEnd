@@ -7,6 +7,7 @@ interface ProdutoFormModalProps {
   produto?: ProdutoForm | null
   onSubmit: (form: ProdutoForm) => void
   onCancel: () => void
+  onExcluir: (id: number) => void
 }
 
 export function ProdutoFormModal({ produto, onSubmit, onCancel }: ProdutoFormModalProps) {
