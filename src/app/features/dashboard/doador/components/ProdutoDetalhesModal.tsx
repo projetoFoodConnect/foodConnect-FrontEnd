@@ -7,7 +7,7 @@ interface Props {
   produto: Produto | null
   onClose: () => void
   onEditar: (produto: Produto) => void
-  onExcluir: (id: string) => void
+  onExcluir: (idProduto: string) => Promise<void>
 }
 
 export function ProdutoDetalhesModal({ produto, onClose, onEditar, onExcluir }: Props) {

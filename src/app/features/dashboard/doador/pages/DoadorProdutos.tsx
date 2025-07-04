@@ -1,16 +1,13 @@
 import { useEffect, useState, type SetStateAction } from 'react'
 import { Layout } from '../../../../shared/components/layout/Layout'
-
 import { ProdutoFiltro } from '../components/ProdutoFiltro'
 import { ProdutoSearch } from '../components/ProdutoSearch'
-
 import {
   listarMeusProdutos,
   cadastrarProduto,
   atualizarProduto,
   deletarProduto
 } from '../../../../shared/services/produtoService'
-
 import type { Produto } from '../../../../shared/types/shared.types'
 import { ProdutoCard } from '../components/ProdutoCard'
 import { toast } from 'react-toastify'
@@ -73,13 +70,17 @@ export function DoadorProdutos() {
     toast.success('Produto atualizado com sucesso!')
   }
 
-  const handleExcluir = async (idProduto: string) => {
-    if (confirm('Tem certeza que deseja excluir este produto?')) {
-      await deletarProduto(idProduto)
-      await carregarProdutos()
-    }
+const handleExcluir = async (idProduto: string) => {
+  try {
+    await deletarProduto(idProduto)
+    toast.success('Produto excluído com sucesso!')
+    setMostrarDetalhes(false)
+    await carregarProdutos()
+  } catch (error) {
+    console.error('Erro ao excluir produto:', error)
+    toast.error('Erro ao excluir produto.')
   }
-
+}
 
   return (
     <Layout>
@@ -171,7 +172,7 @@ export function DoadorProdutos() {
                   setModoForm(true)
                 }}
 
-                handleExcluir={handleExcluir}
+                onExcluir={handleExcluir}
               />
             )}
 
@@ -184,6 +185,7 @@ export function DoadorProdutos() {
                   setProdutoSelecionado(null)
                 }}
                 onSubmit={produtoSelecionado ? handleAtualizar : handleCadastrar}
+                onExcluir={handleExcluir}
               />
             )}
           </div>

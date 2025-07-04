@@ -7,10 +7,10 @@ interface ProdutoFormModalProps {
   produto?: ProdutoForm | null
   onSubmit: (form: ProdutoForm) => void
   onCancel: () => void
-  onExcluir: (id: number) => void
+  onExcluir: (idProduto: string) => Promise<void>
 }
 
-export function ProdutoFormModal({ produto, onSubmit, onCancel }: ProdutoFormModalProps) {
+export function ProdutoFormModal({ produto, onSubmit, onCancel, onExcluir }: ProdutoFormModalProps) {
   const [form, setForm] = useState<ProdutoForm>(
     produto ?? {
       descricao: '',
