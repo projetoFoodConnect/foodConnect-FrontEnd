@@ -1,21 +1,18 @@
-import axios from 'axios'
 import type { LoginPayload, LoginResponse, RegisterPayload } from '../types/auth.types'
 import api from '../../../../lib/api'
 
-const API = 'http://localhost:3000/api'
 
 export async function loginRequest(payload: LoginPayload): Promise<LoginResponse> {
-  const response = await axios.post(`${API}/user/login`, payload, {
-    withCredentials: true,
-  })
+  const response = await api.post<LoginResponse>('/user/login', payload)
   return response.data
 }
 
 export async function registerUser(payload: RegisterPayload) {
-  const response = await axios.post(`${API}/user/register`, payload)
+  const response = await api.post('/user/register', payload)
   return response.data
 }
 
 export const logoutService = async () => {
-  await api.post('/user/logout') // limpa o cookie no back
+  // usa o mesmo cliente para limpar o cookie
+  await api.post('/user/logout')
 }
