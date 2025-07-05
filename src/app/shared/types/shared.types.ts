@@ -42,3 +42,9 @@ export type Doacao = {
     nomeOrganizacao: string
   }
 }
+
+export type StatusProduto = {
+  DISPONIVEL: 'DISPONIVEL',
+  INDISPONIVEL: 'INDISPONIVEL',
+  DOADO: 'DOADO',
+}

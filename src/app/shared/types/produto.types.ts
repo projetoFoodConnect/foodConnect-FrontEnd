@@ -7,3 +7,4 @@ export interface ProdutoForm {
   tipo: TipoProduto
   imagem: File | null
 }
+
