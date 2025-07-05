@@ -19,7 +19,6 @@ export default function StepThreeContact({ formData, atualizarDados, onVoltar }:
   const handleSubmit = async () => {
     const { nome, email, telefone, senha, confirmarSenha, termosAceitos, endereco } = formData
 
-    // Validação básica
     if (!nome || !email || !telefone || !senha || !confirmarSenha) {
       setErro('Preencha todos os campos obrigatórios.')
       return

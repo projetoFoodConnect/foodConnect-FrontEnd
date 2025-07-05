@@ -20,7 +20,7 @@ export default function AppRoutes() {
       <Routes>
         {/* Página inicial = Login */}
         <Route path="/" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/home" replace />} />
-        <Route path="/register" element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/home" replace />} />
+        <Route path="/register" element={<RegisterPage />} />
 
         {/* Redirecionamento de perfil */}
         <Route
