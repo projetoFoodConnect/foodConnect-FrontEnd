@@ -1,21 +1,46 @@
-import { Package, CalendarCheck, Clock } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../auth/contexts/AuthContext'
-import { Layout } from '../../../../shared/components/layout/Layout'
+import { Package, CalendarCheck, Clock } from 'lucide-react'
 
-export function ReceptorHome() {
+import { Layout } from '../../../../shared/components/layout/Layout'
+import { useAuth } from '../../../auth/contexts/AuthContext'
+import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
+import type { Doacao } from '../../../../shared/types/shared.types'
+
+export default function ReceptorHome() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-return (
+  const [doacoes, setDoacoes] = useState<Doacao[]>([])
+
+  useEffect(() => {
+    const carregar = async () => {
+      try {
+        const data = await getMinhasDoacoes()
+        setDoacoes(data.doacoes) // ← Corrigido aqui
+      } catch (error) {
+        console.error('Erro ao carregar doações:', error)
+      }
+    }
+
+    carregar()
+  }, [])
+
+  const recebidas = doacoes.filter((d) => d.status === 'RECEBIDA').length
+  const pendentes = doacoes.filter((d) => d.status === 'PENDENTE').length
+  const total = doacoes.length
+
+  return (
     <Layout>
       <div className="p-6 space-y-8">
         {/* Cabeçalho */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
-            Olá, {user?.nome || 'Receptor'}!👋
+          <h1 className="text-2xl font-bold text-green-800">
+            Olá, {user?.nome || 'Receptor'}!
           </h1>
-          <p className="text-gray-600">Encontre e reserve alimentos disponíveis para sua instituição</p>
+          <p className="text-gray-600">
+            Encontre e reserve alimentos disponíveis para sua instituição
+          </p>
         </div>
 
         {/* Resumo das Atividades */}
@@ -23,23 +48,23 @@ return (
           <div className="border rounded-xl p-4 bg-green-50 flex items-center gap-4">
             <Package className="text-green-700 w-6 h-6" />
             <div>
-              <p className="text-xl font-bold text-green-900">112</p>
-              <p className="text-sm text-gray-600">Produtos disponíveis</p>
+              <p className="text-xl font-bold text-green-900">{total}</p>
+              <p className="text-sm text-gray-600">Reservas realizadas</p>
             </div>
           </div>
 
           <div className="border rounded-xl p-4 bg-green-50 flex items-center gap-4">
             <CalendarCheck className="text-green-700 w-6 h-6" />
             <div>
-              <p className="text-xl font-bold text-green-900">34</p>
-              <p className="text-sm text-gray-600">Reservas este mês</p>
+              <p className="text-xl font-bold text-green-900">{recebidas}</p>
+              <p className="text-sm text-gray-600">Reservas recebidas</p>
             </div>
           </div>
 
           <div className="border rounded-xl p-4 bg-green-50 flex items-center gap-4">
             <Clock className="text-green-700 w-6 h-6" />
             <div>
-              <p className="text-xl font-bold text-green-900">5</p>
+              <p className="text-xl font-bold text-green-900">{pendentes}</p>
               <p className="text-sm text-gray-600">Pendentes de coleta</p>
             </div>
           </div>

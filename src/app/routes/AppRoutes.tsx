@@ -6,10 +6,11 @@ import { DoadorHome } from '../features/dashboard/doador/pages/DoadorHome'
 import { DoadorProdutos } from '../features/dashboard/doador/pages/DoadorProdutos'
 import DoadorDoacoes from '../features/dashboard/doador/pages/DoadorDoacoes'
 import { PrivateRoute } from './PrivateRoute'
-import { ReceptorHome } from '../features/dashboard/receptor/pages/ReceptorHome'
+
 import { getPathByPerfil } from '../shared/utils/redirectByPerfil'
 import ReceptorProdutos from '../features/dashboard/receptor/pages/ReceptorProdutos'
 import ReceptorDoacoes from '../features/dashboard/receptor/pages/ReceptorDoacoes'
+import ReceptorHome from '../features/dashboard/receptor/pages/ReceptorHome'
 
 export default function AppRoutes() {
   const { isAuthenticated, user } = useAuth()

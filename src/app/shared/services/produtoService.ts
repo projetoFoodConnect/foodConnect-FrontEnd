@@ -2,7 +2,6 @@ import api from "../../../lib/api"
 import type { ProdutoForm } from "../types/produto.types"
 import type { Produto } from "../types/shared.types"
 
-// 🔁 Listar produtos do doador autenticado
 export async function listarMeusProdutos(): Promise<Produto[]> {
   try {
     const response = await api.get("/produto/user", { withCredentials: true })
@@ -13,7 +12,6 @@ export async function listarMeusProdutos(): Promise<Produto[]> {
   }
 }
 
-// 📦 Listar todos os produtos disponíveis (receptores)
 export async function listarTodosProdutosDisponiveis(): Promise<Produto[]> {
   try {
     console.log('[listarTodosProdutosDisponiveis] Requisição GET /produto/DISPONIVEL')
@@ -21,14 +19,13 @@ export async function listarTodosProdutosDisponiveis(): Promise<Produto[]> {
       withCredentials: true,
     })
 
-    return response.data.produtos // ✅ ajustado para pegar o campo correto
+    return response.data.produtos 
   } catch (error) {
     console.error('[listarTodosProdutosDisponiveis] Erro na requisição:', error)
     throw error
   }
 }
 
-// ➕ Cadastrar novo produto
 export async function cadastrarProduto(form: ProdutoForm) {
   const formData = new FormData()
   formData.append("descricao", form.descricao)
@@ -52,7 +49,6 @@ export async function cadastrarProduto(form: ProdutoForm) {
   }
 }
 
-// ✏️ Atualizar produto existente
 export async function atualizarProduto(
   id: string,
   form: {
@@ -85,7 +81,6 @@ export async function atualizarProduto(
   }
 }
 
-// 🗑️ Marcar produto como indisponível (soft delete)
 export async function deletarProduto(id: string) {
   try {
     const response = await api.put(`/produto/delete/${id}`, null, {
@@ -94,6 +89,18 @@ export async function deletarProduto(id: string) {
     return response.data
   } catch (error) {
     console.error("[deletarProduto] Erro:", error)
+    throw error
+  }
+}
+
+export async function getProdutosPorStatus(status: string): Promise<Produto[]> {
+  try {
+    const response = await api.get(`/produto/${status}`, {
+      withCredentials: true,
+    })
+    return response.data.produtos
+  } catch (error) {
+    console.error(`[getProdutosPorStatus] Erro ao buscar produtos com status ${status}:`, error)
     throw error
   }
 }
