@@ -24,7 +24,6 @@ export default function DoadorDoacoes() {
   const [filtroStatus, setFiltroStatus] = useState<'TODOS' | 'PLANEJADA' | 'PENDENTE' | 'RECEBIDA' | 'CANCELADA'>('TODOS')
   const [filtroTipo, setFiltroTipo] = useState<(typeof tiposProduto)[number]>('TODOS')
 
-  // modal
   const [modalAberto, setModalAberto] = useState(false)
   const [doacaoSelecionada, setDoacaoSelecionada] = useState<Doacao | null>(null)
   const [novoStatus, setNovoStatus] = useState<string>('')

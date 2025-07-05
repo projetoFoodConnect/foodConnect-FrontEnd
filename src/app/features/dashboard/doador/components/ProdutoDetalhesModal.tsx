@@ -2,7 +2,6 @@ import { BadgeCheck, XCircle, CalendarDays, Package, Pencil, Trash2, X } from 'l
 import type { Produto } from '../../../../shared/types/shared.types'
 import type { JSX } from 'react'
 
-
 interface Props {
   produto: Produto | null
   onClose: () => void

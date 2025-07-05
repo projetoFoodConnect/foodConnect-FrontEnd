@@ -19,7 +19,6 @@ export default function ReceptorDoacoes() {
 
   const carregar = async () => {
     const { doacoes } = await getMinhasDoacoes()
-    // Transição automática PLANEJADA → PENDENTE
     const agora = new Date()
     for (const d of doacoes) {
       if (d.status === 'PLANEJADA' && new Date(d.dataPlanejada) < agora) {

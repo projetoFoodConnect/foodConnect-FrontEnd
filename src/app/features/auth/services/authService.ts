@@ -12,6 +12,5 @@ export async function registerUser(payload: RegisterPayload) {
 }
 
 export const logoutService = async () => {
-  // usa o mesmo cliente para limpar o cookie
   await api.post('/user/logout', { withCredentials: true })
 }

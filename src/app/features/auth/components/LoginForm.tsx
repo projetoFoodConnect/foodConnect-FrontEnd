@@ -12,7 +12,7 @@ export default function LoginForm() {
 const handleSubmit = async () => {
   try {
     console.log('Iniciando login...')
-    await login({ email, senha }) // essa função vem do useAuth
+    await login({ email, senha }) 
     console.log('Login bem-sucedido')
     navigate('/dashboard')
   } catch (error) {

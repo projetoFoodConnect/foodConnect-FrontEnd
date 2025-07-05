@@ -17,7 +17,7 @@ export default function ReceptorHome() {
     const carregar = async () => {
       try {
         const data = await getMinhasDoacoes()
-        setDoacoes(data.doacoes) // ← Corrigido aqui
+        setDoacoes(data.doacoes) 
       } catch (error) {
         console.error('Erro ao carregar doações:', error)
       }
