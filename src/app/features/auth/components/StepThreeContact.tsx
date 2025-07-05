@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { registerUser } from '../services/authService'
-import type { FormDataCadastro } from '../types/auth.types'
+import type { FormDataCadastro, RegisterPayload } from '../types/auth.types'
 import { useNavigate } from 'react-router-dom'
 
 interface StepThreeContactProps {
@@ -40,7 +40,6 @@ export default function StepThreeContact({ formData, atualizarDados, onVoltar }:
       return
     }
 
-    // Monta endereço como string
     const enderecoCompleto = `${endereco.rua}, ${endereco.numero} - ${endereco.bairro}, ${endereco.cidade}/${endereco.estado}`
 
     const payload = {
@@ -51,7 +50,7 @@ export default function StepThreeContact({ formData, atualizarDados, onVoltar }:
     console.log('📦 Enviando payload para API:', payload)
 
     try {
-      const response = await registerUser(payload)
+      const response = await registerUser(payload as RegisterPayload)
       console.log('✅ Cadastro realizado com sucesso:', response)
       alert('Conta criada com sucesso!')
 

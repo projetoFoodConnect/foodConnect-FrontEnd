@@ -11,8 +11,7 @@ export function Header() {
     if (!user) return null
 
     const perfil = user.perfilUsuario
-    const nome = user.nome || 'Usuário'
-
+    
     const rotas = {
         home: getHomePathByPerfil(perfil),
         produtos: getProdutosPathByPerfil(perfil),

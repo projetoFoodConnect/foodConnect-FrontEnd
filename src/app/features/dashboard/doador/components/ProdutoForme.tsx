@@ -169,7 +169,3 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
     </div>
   )
 }
-
-function onChange(event: ChangeEvent<HTMLInputElement>): void {
-  throw new Error('Function not implemented.')
-}
