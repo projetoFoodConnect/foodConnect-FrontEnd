@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Package, Heart, ArrowRight } from 'lucide-react'
+import { Package, Heart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Layout } from '../../../../shared/components/layout/Layout'
 import { useAuth } from '../../../auth/contexts/AuthContext'

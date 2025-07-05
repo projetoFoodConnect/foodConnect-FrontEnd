@@ -25,17 +25,22 @@ export function DoadorProdutos() {
   const [mostrarDetalhes, setMostrarDetalhes] = useState(false)
 
 
-  const carregarProdutos = async () => {
-    try {
-      const data = await listarMeusProdutos()
-      console.log('Produtos do doador:', data) // debug
-      const ordenado = data.sort((a, b) => new Date(b.dataPostagem).getTime() - new Date(a.dataPostagem).getTime())
-      setProdutos(ordenado)
+const carregarProdutos = async () => {
+  try {
+    const data = await listarMeusProdutos()
+    const ordenado = data.sort((a, b) => new Date(b.dataPostagem).getTime() - new Date(a.dataPostagem).getTime())
+    setProdutos(ordenado)
+
+    if (ordenado.length > 0) {
       toast.success('Produtos carregados com sucesso!')
-    } catch (error) {
-      console.error('[DoadorProdutos] Erro ao carregar produtos:', error)
+    } else {
+      toast.error('Nenhum produto encontrado.')
     }
+  } catch (error) {
+    toast.error('Erro ao carregar produtos. Tente novamente.')
+    console.error('[DoadorProdutos] Erro ao carregar produtos:', error)
   }
+}
 
 
   useEffect(() => {
