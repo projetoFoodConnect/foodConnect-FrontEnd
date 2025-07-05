@@ -1,62 +1,90 @@
+import { useEffect, useState } from 'react'
 import { Package, Heart, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Layout } from '../../../../shared/components/layout/Layout'
 import { useAuth } from '../../../auth/contexts/AuthContext'
+import { listarMeusProdutos } from '../../../../shared/services/produtoService'
+import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
+import type { Produto, Doacao } from '../../../../shared/types/shared.types'
 
 export function DoadorHome() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
+  const [produtos, setProdutos] = useState<Produto[]>([])
+  const [doacoes, setDoacoes] = useState<Doacao[]>([])
+
+  const carregarDados = async () => {
+    try {
+      const produtosData = await listarMeusProdutos()
+      const doacoesData = await getMinhasDoacoes()
+      setProdutos(produtosData)
+      setDoacoes(doacoesData.doacoes)
+    } catch (error) {
+      console.error('Erro ao carregar dados do resumo:', error)
+    }
+  }
+
+  useEffect(() => {
+    carregarDados()
+  }, [])
+
   return (
     <Layout>
-      <div className="flex flex-col gap-6">
-        {/* Título e saudação */}
+      <div className="p-6 space-y-8">
+        {/* Cabeçalho */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-green-800">
             Olá, {user?.nome || 'Doador'}! 👋
           </h1>
-          <p className="text-sm text-gray-500">Bem-vindo de volta ao FoodConnect. Aqui está um resumo das suas atividades:</p>
+          <p className="text-gray-600">
+            Acompanhe o impacto das suas doações e mantenha seus produtos atualizados
+          </p>
         </div>
 
-        {/* Cards de resumo */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* Total de Produtos */}
-          <div className="bg-white border rounded-xl shadow-sm p-5 flex items-center gap-4">
-            <div className="bg-green-100 p-3 rounded-full">
-              <Package className="w-6 h-6 text-green-700" />
-            </div>
+        {/* Resumo das Atividades */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="border rounded-xl p-4 bg-green-50 flex items-center gap-4">
+            <Package className="text-green-700 w-6 h-6" />
             <div>
-              <p className="text-sm text-gray-500">Produtos cadastrados</p>
-              <p className="text-xl font-bold text-green-800">6</p>
+              <p className="text-xl font-bold text-green-900">{produtos.length}</p>
+              <p className="text-sm text-gray-600">Produtos cadastrados</p>
             </div>
           </div>
 
-          {/* Total de Doações */}
-          <div className="bg-white border rounded-xl shadow-sm p-5 flex items-center gap-4">
-            <div className="bg-red-100 p-3 rounded-full">
-              <Heart className="w-6 h-6 text-red-700" />
-            </div>
+          <div className="border rounded-xl p-4 bg-red-50 flex items-center gap-4">
+            <Heart className="text-red-700 w-6 h-6" />
             <div>
-              <p className="text-sm text-gray-500">Doações realizadas</p>
-              <p className="text-xl font-bold text-red-800">4</p>
+              <p className="text-xl font-bold text-red-900">{doacoes.length}</p>
+              <p className="text-sm text-gray-600">Doações realizadas</p>
             </div>
           </div>
         </div>
 
-        {/* Acesso rápido */}
-        <div className="mt-4 flex flex-col sm:flex-row gap-4">
+        {/* Ações Rápidas */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <button
             onClick={() => navigate('/produtos/doador')}
-            className="flex items-center gap-2 bg-green-700 text-white px-5 py-3 rounded hover:bg-green-800"
+            className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
           >
-            Ver meus produtos <ArrowRight className="w-4 h-4" />
+            <p className="font-medium text-green-800">Gerenciar Produtos</p>
+            <p className="text-sm text-gray-600">Visualize e cadastre novos alimentos</p>
           </button>
 
           <button
             onClick={() => navigate('/doacoes/doador')}
-            className="flex items-center gap-2 bg-red-600 text-white px-5 py-3 rounded hover:bg-red-700"
+            className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
           >
-            Ver minhas doações <ArrowRight className="w-4 h-4" />
+            <p className="font-medium text-green-800">Minhas Doações</p>
+            <p className="text-sm text-gray-600">Acompanhe suas entregas realizadas</p>
+          </button>
+
+          <button
+            onClick={() => navigate('/produtos/doador')}
+            className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
+          >
+            <p className="font-medium text-green-800">Cadastrar Produto</p>
+            <p className="text-sm text-gray-600">Adicione novos itens ao estoque</p>
           </button>
         </div>
       </div>
