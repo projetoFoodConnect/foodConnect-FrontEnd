@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { Package, Heart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Layout } from '../../../../shared/components/layout/Layout'
-import { useAuth } from '../../../auth/contexts/AuthContext'
 import { listarMeusProdutos } from '../../../../shared/services/produtoService'
 import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
 import type { Produto, Doacao } from '../../../../shared/types/shared.types'
+import { useAuth } from '../../../auth/hooks/useAuth'
 
 export function DoadorHome() {
   const { user } = useAuth()
@@ -38,7 +38,7 @@ export function DoadorHome() {
             Olá, {user?.nome || 'Doador'}! 👋
           </h1>
           <p className="text-gray-600">
-            Bem-vindo de volta, Doador! Acompanhe o impacto das suas doações e mantenha seus produtos atualizados.
+            Bem-vindo de volta! Acompanhe o impacto das suas doações e mantenha seus produtos atualizados.
           </p>
         </div>
 

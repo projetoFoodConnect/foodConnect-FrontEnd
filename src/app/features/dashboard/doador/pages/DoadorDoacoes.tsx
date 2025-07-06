@@ -1,13 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  BadgeCheck,
-  Clock,
-  Hourglass,
-  Search,
-  Pencil,
-  Building2,
-  CalendarDays,
-} from 'lucide-react'
+import { BadgeCheck, Clock, Hourglass, Search, Pencil, Building2, CalendarDays, } from 'lucide-react'
 import { getMinhasDoacoes, atualizarStatusDoacao } from '../../../../shared/services/doacaoService'
 import type { Doacao } from '../../../../shared/types/shared.types'
 import { toast } from 'react-toastify'
