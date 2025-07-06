@@ -177,7 +177,7 @@ export function DoadorDoacoes() {
                         <button
                           key={s}
                           className={cn(
-                            'text-xs px-3 py-1 border rounded-full transition',
+                            'text-xs px-3 py-1 rounded-full transition',
                             d.status === s
                               ? 'bg-gray-200 text-gray-700'
                               : 'text-gray-600 hover:bg-gray-50'
