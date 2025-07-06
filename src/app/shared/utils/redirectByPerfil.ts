@@ -3,7 +3,7 @@ export function getHomePathByPerfil(perfil: string): string {
     case 'DOADOR':
       return '/home/doador'
     case 'RECEPTOR':
-      return '/home/beneficiario'
+      return '/home/receptor'
     case 'ADMINISTRADOR':
       return '/home/admin'
     default:
@@ -16,7 +16,7 @@ export function getProdutosPathByPerfil(perfil: string): string {
     case 'DOADOR':
       return '/produtos/doador'
     case 'RECEPTOR':
-      return '/produtos/beneficiario'
+      return '/produtos/receptor'
     case 'ADMINISTRADOR':
       return '/produtos/admin'
     default:
@@ -29,7 +29,7 @@ export function getDoacoesPathByPerfil(perfil: string): string {
     case 'DOADOR':
       return '/doacoes/doador'
     case 'RECEPTOR':
-      return '/doacoes/beneficiario'
+      return '/doacoes/receptor'
     case 'ADMINISTRADOR':
       return '/doacoes/admin'
     default:
@@ -45,9 +45,9 @@ export function getPathByPerfil(perfil: string, base: 'home' | 'produtos' | 'doa
       doacoes: '/doacoes/doador',
     },
     RECEPTOR: {
-      home: '/home/beneficiario',
-      produtos: '/produtos/beneficiario',
-      doacoes: '/doacoes/beneficiario',
+      home: '/home/receptor',
+      produtos: '/produtos/receptor',
+      doacoes: '/doacoes/receptor',
     },
     ADMINISTRADOR: {
       home: '/home/admin',

@@ -6,3 +6,4 @@ export const formatDate = (isoDate: string): string => {
     year: 'numeric'
   })
 }
+

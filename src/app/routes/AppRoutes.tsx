@@ -9,8 +9,8 @@ import { DoadorHome } from '../features/dashboard/doador/pages/DoadorHome'
 import { DoadorProdutos } from '../features/dashboard/doador/pages/DoadorProdutos'
 import { ReceptorDoacoes } from '../features/dashboard/receptor/pages/ReceptorDoacoes'
 import ReceptorHome from '../features/dashboard/receptor/pages/ReceptorHome'
-import ReceptorProdutos from '../features/dashboard/receptor/pages/ReceptorProdutos'
 import { useAuth } from '../features/auth/hooks/useAuth'
+import ReceptorProdutos from '../features/dashboard/receptor/pages/ReceptorProdutos'
 
 export default function AppRoutes() {
   const { isAuthenticated, user } = useAuth()
@@ -57,9 +57,9 @@ export default function AppRoutes() {
         <Route path="/doacoes/doador" element={<PrivateRoute><DoadorDoacoes /></PrivateRoute>} />
 
         {/* Rotas do RECEPTOR */}
-        <Route path="/home/beneficiario" element={<PrivateRoute><ReceptorHome /></PrivateRoute>} />
-        <Route path="/produtos/beneficiario" element={<PrivateRoute><ReceptorProdutos /></PrivateRoute>} />
-        <Route path="/doacoes/beneficiario" element={<PrivateRoute><ReceptorDoacoes /></PrivateRoute>} />
+        <Route path="/home/receptor" element={<PrivateRoute><ReceptorHome /></PrivateRoute>} />
+        <Route path="/produtos/receptor" element={<PrivateRoute><ReceptorProdutos /></PrivateRoute>} />
+        <Route path="/doacoes/receptor" element={<PrivateRoute><ReceptorDoacoes /></PrivateRoute>} />
 
 
         {/* Fallback */}

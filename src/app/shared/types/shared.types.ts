@@ -16,8 +16,8 @@ export interface Produto {
   imagemUrl?: string
   createdAt: string
   donoId: string
-  donoNome?: string
-  donoOrganizacao?: string
+  donoNome: string
+  donoOrganizacao: string
 }
 
 export type Doacao = {
