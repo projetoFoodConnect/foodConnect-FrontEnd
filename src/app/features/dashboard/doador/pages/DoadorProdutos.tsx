@@ -15,6 +15,7 @@ import type { ProdutoForm } from '../../../../shared/types/produto.types'
 import { ProdutoForme } from '../components/ProdutoForme'
 import { ProdutoDetalhesModal } from '../components/ProdutoDetalhesModal'
 import { ProdutoFormModal } from '../components/ProdutoFormModal'
+import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
 
 export function DoadorProdutos() {
   const [produtos, setProdutos] = useState<Produto[]>([])
@@ -23,6 +24,7 @@ export function DoadorProdutos() {
   const [modoForm, setModoForm] = useState(false)
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null)
   const [mostrarDetalhes, setMostrarDetalhes] = useState(false)
+  const [loading, setLoading] = useState(true)
 
 
 const carregarProdutos = async () => {
@@ -39,6 +41,8 @@ const carregarProdutos = async () => {
   } catch (error) {
     toast.error('Erro ao carregar produtos. Tente novamente.')
     console.error('[DoadorProdutos] Erro ao carregar produtos:', error)
+  } finally {
+    setLoading(false)
   }
 }
 
@@ -86,6 +90,8 @@ const handleExcluir = async (idProduto: string) => {
     toast.error('Erro ao excluir produto.')
   }
 }
+
+  if (loading) return <FullPageLoader />
 
   return (
     <Layout>

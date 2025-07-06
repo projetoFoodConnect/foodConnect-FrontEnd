@@ -6,6 +6,7 @@ import { listarMeusProdutos } from '../../../../shared/services/produtoService'
 import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
 import type { Produto, Doacao } from '../../../../shared/types/shared.types'
 import { useAuth } from '../../../auth/hooks/useAuth'
+import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
 
 export function DoadorHome() {
   const { user } = useAuth()
@@ -13,6 +14,7 @@ export function DoadorHome() {
 
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
+  const [loading, setLoading] = useState(true)
 
   const carregarDados = async () => {
     try {
@@ -22,12 +24,16 @@ export function DoadorHome() {
       setDoacoes(doacoesData.doacoes)
     } catch (error) {
       console.error('Erro ao carregar dados do resumo:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
   useEffect(() => {
     carregarDados()
   }, [])
+
+  if (loading) return <FullPageLoader />
 
   return (
     <Layout>

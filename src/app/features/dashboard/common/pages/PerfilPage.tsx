@@ -4,10 +4,12 @@ import { getProfile, updateProfile, deleteAccount } from '../../../auth/services
 import { toast } from 'react-toastify'
 import type { User } from '../../../auth/types/auth.types'
 import { Layout } from '../../../../shared/components/layout/Layout'
+import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
 
 export default function PerfilPage() {
     const [form, setForm] = useState<User | null>(null)
     const [original, setOriginal] = useState<User | null>(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -17,6 +19,8 @@ export default function PerfilPage() {
                 setOriginal(user)
             } catch (err) {
                 toast.error('Erro ao carregar perfil')
+            } finally {
+                setLoading(false)
             }
         }
 
@@ -55,7 +59,8 @@ export default function PerfilPage() {
         }
     }
 
-    if (!form) return <p className="text-center mt-8">Carregando perfil...</p>
+    if (loading) return <FullPageLoader/>
+    if (!form) return
 
     return (
         <Layout>
