@@ -11,6 +11,7 @@ import ReceptorDoacoes from '../features/dashboard/receptor/pages/ReceptorDoacoe
 import ReceptorHome from '../features/dashboard/receptor/pages/ReceptorHome'
 import { DoadorProdutos } from '../features/dashboard/doador/pages/DoadorProdutos'
 import DoadorDoacoes from '../features/dashboard/doador/pages/DoadorDoacoes'
+import PerfilPage from '../features/dashboard/common/pages/PerfilPage'
 
 export default function AppRoutes() {
   const { isAuthenticated, user } = useAuth()
@@ -19,7 +20,7 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Routes>
         {/* Página inicial = Login */}
-        <Route path="/" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/home" replace />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
         {/* Redirecionamento de perfil */}
@@ -31,6 +32,7 @@ export default function AppRoutes() {
               : null
           }
         />
+         
         <Route
           path="/produtos"
           element={
@@ -48,6 +50,8 @@ export default function AppRoutes() {
           }
         />
 
+        <Route path='/perfil' element={<PrivateRoute><PerfilPage /></PrivateRoute>} />
+
         {/* Rotas do DOADOR */}
         <Route path="/home/doador" element={<PrivateRoute><DoadorHome /></PrivateRoute>} />
         <Route path="/produtos/doador" element={<PrivateRoute><DoadorProdutos /></PrivateRoute>} />
@@ -58,7 +62,6 @@ export default function AppRoutes() {
         <Route path="/produtos/beneficiario" element={<PrivateRoute><ReceptorProdutos /></PrivateRoute>} />
         <Route path="/doacoes/beneficiario" element={<PrivateRoute><ReceptorDoacoes /></PrivateRoute>} />
 
-        {/* TODO: Rotas do ADMIN vão aqui depois */}
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

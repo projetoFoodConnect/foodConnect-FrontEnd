@@ -8,3 +8,12 @@ export async function getProfile(): Promise<User> {
 
   return response.data.usuario
 }
+
+export async function updateProfile(payload: Partial<User>) {
+  return await api.put('/user/update', payload, { withCredentials: true })
+}
+
+export async function deleteAccount() {
+  return await api.put('/user/delete', { withCredentials: true })
+}
+
