@@ -11,7 +11,7 @@ export function Header() {
     if (!user) return null
 
     const perfil = user.perfilUsuario
-    
+
     const rotas = {
         home: getHomePathByPerfil(perfil),
         produtos: getProdutosPathByPerfil(perfil),
@@ -43,8 +43,8 @@ export function Header() {
                 <button
                     onClick={() => navigate(rotas.home)}
                     className={`flex items-center gap-1 text-sm px-3 py-1 rounded-md border ${rotaAtiva(rotas.home)
-                            ? 'bg-green-100 text-green-900 border-green-300'
-                            : 'text-gray-700 border-transparent hover:bg-gray-100'
+                        ? 'bg-green-100 text-green-900 border-green-300'
+                        : 'text-gray-700 border-transparent hover:bg-gray-100'
                         }`}
                 >
                     <Home size={16} />
@@ -54,8 +54,8 @@ export function Header() {
                 <button
                     onClick={() => navigate(rotas.produtos)}
                     className={`flex items-center gap-1 text-sm px-3 py-1 rounded-md border ${rotaAtiva(rotas.produtos)
-                            ? 'bg-green-100 text-green-900 border-green-300'
-                            : 'text-gray-700 border-transparent hover:bg-gray-100'
+                        ? 'bg-green-100 text-green-900 border-green-300'
+                        : 'text-gray-700 border-transparent hover:bg-gray-100'
                         }`}
                 >
                     <Package size={16} />
@@ -65,8 +65,8 @@ export function Header() {
                 <button
                     onClick={() => navigate(rotas.doacoes)}
                     className={`flex items-center gap-1 text-sm px-3 py-1 rounded-md border ${rotaAtiva(rotas.doacoes)
-                            ? 'bg-green-100 text-green-900 border-green-300'
-                            : 'text-gray-700 border-transparent hover:bg-gray-100'
+                        ? 'bg-green-100 text-green-900 border-green-300'
+                        : 'text-gray-700 border-transparent hover:bg-gray-100'
                         }`}
                 >
                     <Heart size={16} />
@@ -76,10 +76,13 @@ export function Header() {
 
             {/* Perfil e Logout */}
             <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1 rounded-full px-2 py-1">
+                <button
+                    onClick={() => navigate('/perfil')}
+                    className="flex items-center gap-1 rounded-full px-2 py-1 hover:bg-green-50 transition text-gray-700 border border-gray-200"
+                >
                     <UserCircle className="w-6 h-6 text-green-800" />
                     <ChevronDown className="w-4 h-4 text-green-700" />
-                </div>
+                </button>
 
                 {/* Botão Sair */}
                 <button
