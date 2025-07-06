@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 export default function LoginForm() {
   const { login } = useAuth()
@@ -14,7 +14,7 @@ const handleSubmit = async () => {
     console.log('Iniciando login...')
     await login({ email, senha }) 
     console.log('Login bem-sucedido')
-    navigate('/dashboard')
+    navigate('/home')
   } catch (error) {
     console.error('Erro no login:', error)
     setErro('Email ou senha inválidos')

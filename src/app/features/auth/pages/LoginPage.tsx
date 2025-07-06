@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react'
 import { getHomePathByPerfil } from '../../../shared/utils/redirectByPerfil'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 export default function LoginPage() {
     const { login, user } = useAuth()
@@ -13,6 +13,7 @@ export default function LoginPage() {
     const [mostrarSenha, setMostrarSenha] = useState(false)
     const [lembrar, setLembrar] = useState(false)
     const [erro, setErro] = useState('')
+    const irCadastro = () => navigate('/register')
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -119,7 +120,7 @@ export default function LoginPage() {
 
                 <p className="text-sm text-center text-gray-600">
                     Não tem uma conta?{' '}
-                    <a href="/register" className="text-green-700 hover:underline font-medium">
+                    <a onClick={irCadastro} className="text-green-700 hover:underline font-medium">
                         Cadastre-se
                     </a>
                 </p>

@@ -1,6 +1,7 @@
 import { Check, HandHelping, PackageSearch } from 'lucide-react'
 import type { JSX } from 'react'
 import type { FormDataCadastro, PerfilUsuario } from '../types/auth.types'
+import { useNavigate } from 'react-router-dom'
 
 
 interface StepOneProfileProps {
@@ -11,6 +12,9 @@ interface StepOneProfileProps {
 
 export default function StepOneProfile({ formData, atualizarDados, onContinuar }: StepOneProfileProps) {
   const selecionado = formData.perfilUsuario
+  const navigate = useNavigate()
+
+  const irLogin = () => { navigate('/login') }
 
   const CardPerfil = ({
     tipo,
@@ -96,7 +100,7 @@ export default function StepOneProfile({ formData, atualizarDados, onContinuar }
 
       <p className="text-sm text-center text-gray-600">
         Já tem uma conta?{' '}
-        <a href="/" className="text-green-700 hover:underline font-medium">
+        <a onClick={irLogin} className="text-green-700 hover:underline font-medium">
           Fazer login
         </a>
       </p>
