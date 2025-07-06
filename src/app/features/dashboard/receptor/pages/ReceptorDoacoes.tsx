@@ -92,7 +92,7 @@ export function ReceptorDoacoes() {
               <button
                 key={s}
                 className={cn(
-                  'px-4 py-1 rounded-full border text-sm',
+                  'px-4 py-1 rounded-sm border border-gray-200 text-sm',
                   filtro === s
                     ? 'bg-green-600 text-white border-green-700'
                     : 'bg-white text-gray-600 hover:bg-gray-100'
@@ -106,7 +106,7 @@ export function ReceptorDoacoes() {
             {filtro !== 'TODOS' && (
               <button
                 onClick={() => setFiltro('TODOS')}
-                className="text-xs px-3 py-1 rounded-full border border-gray-300 hover:bg-gray-100 text-gray-600"
+                className="text-xs px-3 py-1 rounded-sm border border-gray-300 hover:bg-gray-100 text-gray-600"
               >
                 Limpar filtro
               </button>
@@ -120,7 +120,7 @@ export function ReceptorDoacoes() {
               placeholder="Buscar por produto..."
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              className="pl-10 pr-4 py-2 border rounded-full text-sm w-full"
+              className="pl-10 pr-4 py-2 rounded-sm border border-gray-300 text-sm w-full"
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ export function ReceptorDoacoes() {
               return (
                 <div
                   key={d.idDoacao}
-                  className="flex gap-4 bg-white rounded-lg shadow-sm border p-4"
+                  className="flex gap-4 bg-white rounded-lg shadow-sm p-4"
                 >
 
                   <div className="flex-1">
