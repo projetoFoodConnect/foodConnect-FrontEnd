@@ -32,9 +32,7 @@ export function Header() {
                 className="text-green-800 font-bold text-lg cursor-pointer flex items-center gap-2"
                 onClick={() => navigate(rotas.home)}
             >
-                <span className="bg-green-100 p-1 rounded-lg">
-                    <Heart className="w-5 h-5 text-green-700" />
-                </span>
+                <img src="/foodconnect-blacklogo.png" alt="Logo FoodConnect" className="w-8 h-8" />
                 FoodConnect
             </div>
 

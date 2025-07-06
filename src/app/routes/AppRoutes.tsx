@@ -21,7 +21,6 @@ export default function AppRoutes() {
       <Routes>
         {/* Página inicial = Login */}
         <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
 
         {/* Redirecionamento de perfil */}
         <Route
@@ -32,7 +31,7 @@ export default function AppRoutes() {
               : null
           }
         />
-         
+
         <Route
           path="/produtos"
           element={
@@ -52,6 +51,7 @@ export default function AppRoutes() {
 
         <Route path='/perfil' element={<PrivateRoute><PerfilPage /></PrivateRoute>} />
 
+        <Route path="/register" element={<RegisterPage />} />
         {/* Rotas do DOADOR */}
         <Route path="/home/doador" element={<PrivateRoute><DoadorHome /></PrivateRoute>} />
         <Route path="/produtos/doador" element={<PrivateRoute><DoadorProdutos /></PrivateRoute>} />
