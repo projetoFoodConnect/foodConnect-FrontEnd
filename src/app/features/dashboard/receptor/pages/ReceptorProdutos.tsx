@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
 import type { Produto } from '../../../../shared/types/shared.types'
 import { listarTodosProdutosDisponiveis } from '../../../../shared/services/produtoService'
-import { registrarDoacao } from '../../../../shared/services/doacaoService'
-import { toast } from 'react-toastify'
 import { Layout } from '../../../../shared/components/layout/Layout'
 import { ReservaModal } from '../components/ReservaModal'
 
 export default function ReceptorProdutos() {
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null)
-  const [loadingId, setLoadingId] = useState<string | null>(null)
+  const [loadingId] = useState<string | null>(null)
 
   const carregarProdutos = async () => {
     try {
