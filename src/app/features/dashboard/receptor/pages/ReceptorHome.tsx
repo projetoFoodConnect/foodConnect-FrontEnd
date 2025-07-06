@@ -76,7 +76,7 @@ export default function ReceptorHome() {
         {/* Ações Rápidas */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <button
-            onClick={() => navigate('/produtos/beneficiario')}
+            onClick={() => navigate('/produtos/receptor')}
             className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
           >
             <p className="font-medium text-green-800">Ver Produtos</p>
@@ -84,7 +84,7 @@ export default function ReceptorHome() {
           </button>
 
           <button
-            onClick={() => navigate('/doacoes/beneficiario')}
+            onClick={() => navigate('/doacoes/receptor')}
             className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
           >
             <p className="font-medium text-green-800">Ver Reservas</p>
@@ -92,7 +92,7 @@ export default function ReceptorHome() {
           </button>
 
           <button
-            onClick={() => navigate('/doacoes/beneficiario')}
+            onClick={() => navigate('/doacoes/receptor')}
             className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
           >
             <p className="font-medium text-green-800">Histórico de Coletas</p>
