@@ -33,7 +33,7 @@ const status = statusInfo[produto.status as keyof typeof statusInfo] || {
 
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-xl max-w-md w-full p-6 relative shadow-lg">
         {/* Botão de fechar */}
         <button
