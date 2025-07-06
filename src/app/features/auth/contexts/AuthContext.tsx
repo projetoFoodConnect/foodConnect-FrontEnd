@@ -1,6 +1,5 @@
 import {
   createContext,
-  useContext,
   useState,
   useEffect,
   type ReactNode
@@ -58,10 +57,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   )
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (!context) throw new Error('useAuth deve ser usado dentro de AuthProvider')
-  return context
 }
