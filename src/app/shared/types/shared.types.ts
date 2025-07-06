@@ -27,6 +27,7 @@ export type Doacao = {
   dataReserva: string
   dataPlanejada: string
   produto: {
+    quantidade: number
     descricao: string
     tipo: string
     unidade: string

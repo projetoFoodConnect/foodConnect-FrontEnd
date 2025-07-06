@@ -40,14 +40,19 @@ export const marcarComoRecebida = async (idDoacao: string) => {
   await api.put(`/doacao/${idDoacao}/recebida`)
 }
 
-export async function atualizarStatusDoacao(idDoacao: number, novoStatus: string) {
+export async function atualizarStatusDoacao(idDoacao: number, novoStatus: string, quantidade?: number) {
   try {
     if (novoStatus === 'CANCELADA') {
       console.log(`Chamando PUT /doacao/${idDoacao}/cancelar`)
       return await api.put(`/doacao/${idDoacao}/cancelar`, null, { withCredentials: true })
     } else {
-      console.log(`Chamando PUT /doacao/${idDoacao}`, { status: novoStatus })
-      return await api.put(`/doacao/${idDoacao}`, { status: novoStatus }, { withCredentials: true })
+      const payload: any = { status: novoStatus }
+      if (quantidade !== undefined) {
+        payload.quantidade = quantidade
+      }
+
+      console.log(`Chamando PUT /doacao/${idDoacao}`, payload)
+      return await api.put(`/doacao/${idDoacao}`, payload, { withCredentials: true })
     }
   } catch (error) {
     console.error('[atualizarStatusDoacao] Erro:', error)
