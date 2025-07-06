@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Package, CalendarCheck, Clock } from 'lucide-react'
-
 import { Layout } from '../../../../shared/components/layout/Layout'
-import { useAuth } from '../../../auth/contexts/AuthContext'
 import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
 import type { Doacao } from '../../../../shared/types/shared.types'
+import { useAuth } from '../../../auth/hooks/useAuth'
 
 export default function ReceptorHome() {
   const { user } = useAuth()

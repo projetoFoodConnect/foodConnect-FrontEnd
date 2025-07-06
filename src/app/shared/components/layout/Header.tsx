@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { LogOut, Heart, Package, Home, ChevronDown, UserCircle } from 'lucide-react'
-import { useAuth } from '../../../features/auth/contexts/AuthContext'
 import { getHomePathByPerfil, getProdutosPathByPerfil, getDoacoesPathByPerfil } from '../../utils/redirectByPerfil'
+import { useAuth } from '../../../features/auth/hooks/useAuth'
 
 export function Header() {
     const location = useLocation()

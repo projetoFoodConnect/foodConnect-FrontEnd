@@ -1,7 +1,6 @@
-
 import { Navigate } from 'react-router-dom'
 import type { JSX } from 'react/jsx-runtime'
-import { useAuth } from '../features/auth/contexts/AuthContext'
+import { useAuth } from '../features/auth/hooks/useAuth'
 
 interface PrivateRouteProps {
   children: JSX.Element

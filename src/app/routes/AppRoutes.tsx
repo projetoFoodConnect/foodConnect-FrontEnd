@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from '../features/auth/contexts/AuthContext'
 import LoginPage from '../features/auth/pages/LoginPage'
 import { PrivateRoute } from './PrivateRoute'
 import PerfilPage from '../features/dashboard/common/pages/PerfilPage'
@@ -11,6 +10,7 @@ import { DoadorProdutos } from '../features/dashboard/doador/pages/DoadorProduto
 import { ReceptorDoacoes } from '../features/dashboard/receptor/pages/ReceptorDoacoes'
 import ReceptorHome from '../features/dashboard/receptor/pages/ReceptorHome'
 import ReceptorProdutos from '../features/dashboard/receptor/pages/ReceptorProdutos'
+import { useAuth } from '../features/auth/hooks/useAuth'
 
 export default function AppRoutes() {
   const { isAuthenticated, user } = useAuth()
