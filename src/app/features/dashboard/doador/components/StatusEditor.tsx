@@ -62,7 +62,7 @@ export function StatusEditor({ doacao, onClose, onAtualizado }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+    <div className="fixed inset-0 bg-black/5 z-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
         <h2 className="text-lg font-bold mb-4">Editar Doação</h2>
 
@@ -108,7 +108,7 @@ export function StatusEditor({ doacao, onClose, onAtualizado }: Props) {
           <button
             onClick={handleCancelar}
             disabled={loading}
-            className="w-full py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            className="w-full py-2 bg-red-400 text-white rounded hover:bg-red-500"
           >
             Cancelar Doação
           </button>
