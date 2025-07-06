@@ -5,6 +5,7 @@ import {
   BadgeCheck,
   Search,
   X,
+  Pencil,
 } from 'lucide-react'
 import { toast } from 'react-toastify'
 
@@ -13,6 +14,8 @@ import { Layout } from '../../../../shared/components/layout/Layout'
 import type { Doacao } from '../../../../shared/types/shared.types'
 import { cn } from '../../../../../lib/utils'
 import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
+import { StatusEditor } from '../components/StatusEditor'
+
 
 export default function DoadorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
@@ -20,6 +23,10 @@ export default function DoadorDoacoes() {
   const [filtro, setFiltro] = useState<'TODOS' | Doacao['status']>('TODOS')
   const [loadingId, setLoadingId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
+  const [modalAberto, setModalAberto] = useState(false)
+  const [doacaoSelecionada, setDoacaoSelecionada] = useState<Doacao | null>(null)
+
+
 
   const carregar = async () => {
     try {
@@ -138,14 +145,16 @@ export default function DoadorDoacoes() {
                 </div>
 
                 {/* STATUS badge */}
-                <div className="self-start mt-1">
-                  <span className={cn(
-                    'flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full',
-                    d.status === 'PLANEJADA' && 'bg-emerald-100 text-emerald-800',
-                    d.status === 'PENDENTE' && 'bg-yellow-100 text-yellow-800',
-                    d.status === 'RECEBIDA' && 'bg-green-100 text-green-800',
-                    d.status === 'CANCELADA' && 'bg-red-100 text-red-800'
-                  )}>
+                <div className="self-start mt-1 md:mt-0 flex flex-col items-center">
+                  <span
+                    className={cn(
+                      'flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full',
+                      d.status === 'PLANEJADA' && 'bg-emerald-100 text-emerald-800',
+                      d.status === 'PENDENTE' && 'bg-yellow-100 text-yellow-800',
+                      d.status === 'RECEBIDA' && 'bg-green-100 text-green-800',
+                      d.status === 'CANCELADA' && 'bg-red-100 text-red-800'
+                    )}
+                  >
                     {d.status === 'PLANEJADA' && <Clock size={14} />}
                     {d.status === 'PENDENTE' && <Hourglass size={14} />}
                     {d.status === 'RECEBIDA' && <BadgeCheck size={14} />}
@@ -155,7 +164,25 @@ export default function DoadorDoacoes() {
                     {d.status === 'RECEBIDA' && 'Entregue'}
                     {d.status === 'CANCELADA' && 'Cancelada'}
                   </span>
+                  <button
+                    onClick={() => {
+                      setDoacaoSelecionada(d)
+                      setModalAberto(true)
+                    }}
+                    className="text-gray-500 hover:text-gray-700 mt-2 text-xs flex items-center gap-1"
+                  >
+                    <Pencil size={14} />
+                    Editar
+                  </button>
                 </div>
+                {modalAberto && doacaoSelecionada && (
+                  <StatusEditor
+                    doacao={doacaoSelecionada}
+                    onClose={() => setModalAberto(false)}
+                    onAtualizado={carregar}
+                  />
+                )}
+
               </div>
             ))}
           </div>

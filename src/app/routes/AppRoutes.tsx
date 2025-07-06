@@ -4,13 +4,13 @@ import { PrivateRoute } from './PrivateRoute'
 import PerfilPage from '../features/dashboard/common/pages/PerfilPage'
 import { getPathByPerfil } from '../shared/utils/redirectByPerfil'
 import { RegisterPage } from '../features/auth/pages/RegisterPage'
-import { DoadorDoacoes } from '../features/dashboard/doador/pages/DoadorDoacoes'
 import { DoadorHome } from '../features/dashboard/doador/pages/DoadorHome'
 import { DoadorProdutos } from '../features/dashboard/doador/pages/DoadorProdutos'
 import { ReceptorDoacoes } from '../features/dashboard/receptor/pages/ReceptorDoacoes'
 import ReceptorHome from '../features/dashboard/receptor/pages/ReceptorHome'
 import { useAuth } from '../features/auth/hooks/useAuth'
 import ReceptorProdutos from '../features/dashboard/receptor/pages/ReceptorProdutos'
+import DoadorDoacoes from '../features/dashboard/doador/pages/DoadorDoacoes'
 
 export default function AppRoutes() {
   const { isAuthenticated, user } = useAuth()

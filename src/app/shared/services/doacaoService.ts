@@ -40,20 +40,42 @@ export const marcarComoRecebida = async (idDoacao: string) => {
   await api.put(`/doacao/${idDoacao}/recebida`)
 }
 
-export async function atualizarStatusDoacao(idDoacao: number, novoStatus: string, quantidade?: number) {
+export async function atualizarStatusDoacao(
+  idDoacao: number,
+  novoStatus?: string,
+  quantidade?: number,
+  dataPlanejada?: string
+) {
   try {
+    // Se for apenas CANCELAR
     if (novoStatus === 'CANCELADA') {
-      console.log(`Chamando PUT /doacao/${idDoacao}/cancelar`)
-      return await api.put(`/doacao/${idDoacao}/cancelar`, null, { withCredentials: true })
-    } else {
-      const payload: any = { status: novoStatus }
-      if (quantidade !== undefined) {
-        payload.quantidade = quantidade
-      }
-
-      console.log(`Chamando PUT /doacao/${idDoacao}`, payload)
-      return await api.put(`/doacao/${idDoacao}`, payload, { withCredentials: true })
+      return await api.put(`/doacao/${idDoacao}/cancelar`, null, {
+        withCredentials: true,
+      })
     }
+
+    // Se for marcar como RECEBIDA
+    if (novoStatus === 'RECEBIDA') {
+      return await api.put(
+        `/doacao/${idDoacao}`,
+        { status: 'RECEBIDA' },
+        { withCredentials: true }
+      )
+    }
+
+    // Se não for CANCELADA nem RECEBIDA, assume que é edição simples (quantidade / data)
+    const payload: any = {}
+    if (quantidade !== undefined) payload.quantidade = quantidade
+    if (dataPlanejada) payload.dataPlanejada = dataPlanejada
+
+    // ⚠️ se nenhum campo foi alterado, não faz requisição
+    if (Object.keys(payload).length === 0) {
+      throw new Error('Nada para atualizar.')
+    }
+
+    return await api.put(`/doacao/${idDoacao}`, payload, {
+      withCredentials: true,
+    })
   } catch (error) {
     console.error('[atualizarStatusDoacao] Erro:', error)
     throw error
