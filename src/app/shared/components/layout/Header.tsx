@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { LogOut, Heart, Package, Home, ChevronDown, UserCircle } from 'lucide-react'
 import { getHomePathByPerfil, getProdutosPathByPerfil, getDoacoesPathByPerfil } from '../../utils/redirectByPerfil'
 import { useAuth } from '../../../features/auth/hooks/useAuth'
+import Logo from '../../../assets/logo-green.png'
 
 export function Header() {
     const location = useLocation()
@@ -29,11 +30,10 @@ export function Header() {
         <header className="w-full bg-white shadow-sm px-6 py-3 flex justify-between items-center">
             {/* Logo + Marca */}
             <div
-                className="text-green-800 font-bold text-lg cursor-pointer flex items-center gap-2"
+                className="font-bold text-lg cursor-pointer flex items-center gap-2"
                 onClick={() => navigate(rotas.home)}
             >
-                <img src="/foodconnect-blacklogo.png" alt="Logo FoodConnect" className="w-8 h-8" />
-                FoodConnect
+                <img src={Logo} alt="Logo FoodConnect" className="ml-12 w-18 h-16" />
             </div>
 
             {/* Navegação */}

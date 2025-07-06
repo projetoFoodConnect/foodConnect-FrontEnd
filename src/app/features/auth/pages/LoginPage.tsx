@@ -34,6 +34,7 @@ export default function LoginPage() {
         <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center px-4">
             {/* Logo e título */}
             <div className="text-center mb-8">
+                
                 <h1 className="text-2xl font-bold text-green-800">FoodConnect</h1>
                 <p className="text-sm text-gray-600 mt-1">
                     Conectando doadores e beneficiários para um mundo sem desperdício
