@@ -1,10 +1,15 @@
+import { Layout } from "../layout/Layout";
+
 export function FullPageLoader() {
-  return (
-    <div className="flex items-center justify-center h-[70vh] text-gray-500 text-sm">
-      <div className="flex flex-col items-center gap-2">
-        <div className="w-8 h-8 border-4 border-green-600 border-t-transparent animate-spin rounded-full" />
-        <p>Carregando...</p>
-      </div>
-    </div>
-  )
+    return (
+        <Layout>
+
+            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-100/70 backdrop-blur-sm">
+                <div className="flex items-center justify-center gap-3 animate-pulse">
+                    <div className="w-10 h-10 border-4 border-green-900 border-t-transparent rounded-full animate-spin shadow-lg" />
+                    <span className="text-green-900 text-lg font-medium">Carregando...</span>
+                </div>
+            </div>
+        </Layout>
+    )
 }
