@@ -38,7 +38,7 @@ export function DoadorHome() {
             Olá, {user?.nome || 'Doador'}! 👋
           </h1>
           <p className="text-gray-600">
-            Acompanhe o impacto das suas doações e mantenha seus produtos atualizados
+            Bem-vindo de volta, Doador! Acompanhe o impacto das suas doações e mantenha seus produtos atualizados.
           </p>
         </div>
 

@@ -38,7 +38,7 @@ export default function ReceptorHome() {
           <h1 className="text-2xl font-bold text-gray-800">
             Olá, {user?.nome || 'Receptor'}! 👋
           </h1>
-          <p className="text-gray-500">Bem-vindo de volta ao FoodConnect. Aqui está um resumo das suas atividades:</p>
+          <p className="text-gray-500">Bem-vindo de volta, Beneficiario! Aqui está um resumo das suas atividades:</p>
         </div>
 
         {/* Resumo das Atividades */}
