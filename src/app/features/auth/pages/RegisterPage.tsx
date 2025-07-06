@@ -4,8 +4,7 @@ import StepTwoOrganization from '../components/StepTwoOrganization'
 import StepThreeContact from '../components/StepThreeContact'
 import type { FormDataCadastro } from '../types/auth.types'
 
-
-export default function RegisterPage() {
+export function RegisterPage() {
   const [etapaAtual, setEtapaAtual] = useState(1)
   const [formData, setFormData] = useState<FormDataCadastro>({
     endereco: {

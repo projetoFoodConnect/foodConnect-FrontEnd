@@ -15,7 +15,7 @@ import { getMinhasDoacoes, atualizarStatusDoacao } from '../../../../shared/serv
 import type { Doacao } from '../../../../shared/types/shared.types'
 import { cn } from '../../../../../lib/utils'
 
-export default function ReceptorDoacoes() {
+export function ReceptorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
   const [busca, setBusca] = useState('')
   const [filtro, setFiltro] = useState<'TODOS' | Doacao['status']>('TODOS')

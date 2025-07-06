@@ -15,7 +15,7 @@ import { cn } from '../../../../../lib/utils'
 import { Layout } from '../../../../shared/components/layout/Layout'
 import ModalEditarDoacao from '../components/ModalEditarDoacao'
 
-export default function DoadorDoacoes() {
+export function DoadorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
   const [busca, setBusca] = useState('')
   const [filtro, setFiltro] = useState<'TODOS' | 'PLANEJADA' | 'PENDENTE' | 'RECEBIDA'>('TODOS')

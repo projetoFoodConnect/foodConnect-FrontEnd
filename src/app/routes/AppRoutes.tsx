@@ -1,17 +1,16 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/contexts/AuthContext'
 import LoginPage from '../features/auth/pages/LoginPage'
-import RegisterPage from '../features/auth/pages/RegisterPage'
-import { DoadorHome } from '../features/dashboard/doador/pages/DoadorHome'
 import { PrivateRoute } from './PrivateRoute'
-
-import { getPathByPerfil } from '../shared/utils/redirectByPerfil'
-import ReceptorProdutos from '../features/dashboard/receptor/pages/ReceptorProdutos'
-import ReceptorDoacoes from '../features/dashboard/receptor/pages/ReceptorDoacoes'
-import ReceptorHome from '../features/dashboard/receptor/pages/ReceptorHome'
-import { DoadorProdutos } from '../features/dashboard/doador/pages/DoadorProdutos'
-import DoadorDoacoes from '../features/dashboard/doador/pages/DoadorDoacoes'
 import PerfilPage from '../features/dashboard/common/pages/PerfilPage'
+import { getPathByPerfil } from '../shared/utils/redirectByPerfil'
+import { RegisterPage } from '../features/auth/pages/RegisterPage'
+import { DoadorDoacoes } from '../features/dashboard/doador/pages/DoadorDoacoes'
+import { DoadorHome } from '../features/dashboard/doador/pages/DoadorHome'
+import { DoadorProdutos } from '../features/dashboard/doador/pages/DoadorProdutos'
+import { ReceptorDoacoes } from '../features/dashboard/receptor/pages/ReceptorDoacoes'
+import ReceptorHome from '../features/dashboard/receptor/pages/ReceptorHome'
+import ReceptorProdutos from '../features/dashboard/receptor/pages/ReceptorProdutos'
 
 export default function AppRoutes() {
   const { isAuthenticated, user } = useAuth()
@@ -50,8 +49,8 @@ export default function AppRoutes() {
         />
 
         <Route path='/perfil' element={<PrivateRoute><PerfilPage /></PrivateRoute>} />
-
         <Route path="/register" element={<RegisterPage />} />
+
         {/* Rotas do DOADOR */}
         <Route path="/home/doador" element={<PrivateRoute><DoadorHome /></PrivateRoute>} />
         <Route path="/produtos/doador" element={<PrivateRoute><DoadorProdutos /></PrivateRoute>} />
