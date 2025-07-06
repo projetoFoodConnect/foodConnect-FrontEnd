@@ -13,11 +13,14 @@ export default function LoginPage() {
     const [mostrarSenha, setMostrarSenha] = useState(false)
     const [lembrar, setLembrar] = useState(false)
     const [erro, setErro] = useState('')
+    const [loading, setLoading] = useState(false)
+
     const irCadastro = () => navigate('/register')
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setErro('')
+        setLoading(true)
 
         try {
             await login({ email, senha })
@@ -27,14 +30,17 @@ export default function LoginPage() {
         } catch (err) {
             console.error(err)
             setErro('E-mail ou senha inválidos.')
+        } finally {
+            setLoading(false)
         }
     }
+
 
     return (
         <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center px-4">
             {/* Logo e título */}
             <div className="text-center mb-8">
-                
+
                 <h1 className="text-2xl font-bold text-green-800">FoodConnect</h1>
                 <p className="text-sm text-gray-600 mt-1">
                     Conectando doadores e beneficiários para um mundo sem desperdício
@@ -112,11 +118,19 @@ export default function LoginPage() {
                     {/* Botão Entrar */}
                     <button
                         type="submit"
-                        className="w-full bg-green-700 hover:bg-green-800 text-white rounded-md py-2 font-medium flex items-center justify-center gap-2"
+                        disabled={loading}
+                        className="w-full bg-green-700 hover:bg-green-800 text-white rounded-md py-2 font-medium flex items-center justify-center gap-2 disabled:opacity-60"
                     >
-                        <LogIn size={18} />
-                        Entrar
+                        {loading ? (
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                            <>
+                                <LogIn size={18} />
+                                Entrar
+                            </>
+                        )}
                     </button>
+
                 </form>
 
                 <p className="text-sm text-center text-gray-600">

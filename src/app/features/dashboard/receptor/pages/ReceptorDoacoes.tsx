@@ -9,17 +9,18 @@ import {
   XCircle,
 } from 'lucide-react'
 import { toast } from 'react-toastify'
-
 import { Layout } from '../../../../shared/components/layout/Layout'
 import { getMinhasDoacoes, atualizarStatusDoacao } from '../../../../shared/services/doacaoService'
 import type { Doacao } from '../../../../shared/types/shared.types'
 import { cn } from '../../../../../lib/utils'
+import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
 
 export function ReceptorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
   const [busca, setBusca] = useState('')
   const [filtro, setFiltro] = useState<'TODOS' | Doacao['status']>('TODOS')
   const [loadingId, setLoadingId] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
 
   const statusInfo = {
     PLANEJADA: {
@@ -44,16 +45,25 @@ export function ReceptorDoacoes() {
     },
   }
 
-  const carregar = async () => {
-    const { doacoes } = await getMinhasDoacoes()
-    const agora = new Date()
-    for (const d of doacoes) {
-      if (d.status === 'PLANEJADA' && new Date(d.dataPlanejada) < agora) {
-        await atualizarStatusDoacao(d.idDoacao, 'PENDENTE')
+const carregar = async () => {
+    setLoading(true) // ✅ inicia carregamento
+    try {
+      const { doacoes } = await getMinhasDoacoes()
+      const agora = new Date()
+
+      for (const d of doacoes) {
+        if (d.status === 'PLANEJADA' && new Date(d.dataPlanejada) < agora) {
+          await atualizarStatusDoacao(d.idDoacao, 'PENDENTE')
+        }
       }
+
+      const atualizadas = await getMinhasDoacoes()
+      setDoacoes(atualizadas.doacoes)
+    } catch (error) {
+      toast.error('Erro ao carregar doações.')
+    } finally {
+      setLoading(false) 
     }
-    const atualizadas = await getMinhasDoacoes()
-    setDoacoes(atualizadas.doacoes)
   }
 
   useEffect(() => {
@@ -79,6 +89,8 @@ export function ReceptorDoacoes() {
     const matchStatus = filtro === 'TODOS' || d.status === filtro
     return matchBusca && matchStatus
   })
+
+  if (loading) return <FullPageLoader />
 
   return (
     <Layout>

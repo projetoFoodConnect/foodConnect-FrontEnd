@@ -5,12 +5,14 @@ import { Layout } from '../../../../shared/components/layout/Layout'
 import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
 import type { Doacao } from '../../../../shared/types/shared.types'
 import { useAuth } from '../../../auth/hooks/useAuth'
+import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
 
 export default function ReceptorHome() {
   const { user } = useAuth()
   const navigate = useNavigate()
-
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
+  const [loading, setLoading] = useState(true)
+
 
   useEffect(() => {
     const carregar = async () => {
@@ -19,11 +21,15 @@ export default function ReceptorHome() {
         setDoacoes(data.doacoes) 
       } catch (error) {
         console.error('Erro ao carregar doações:', error)
+      } finally {
+        setLoading(false)
       }
     }
 
     carregar()
   }, [])
+
+  if (loading) return <FullPageLoader/>
 
   const recebidas = doacoes.filter((d) => d.status === 'RECEBIDA').length
   const pendentes = doacoes.filter((d) => d.status === 'PENDENTE').length

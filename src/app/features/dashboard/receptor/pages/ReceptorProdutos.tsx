@@ -7,11 +7,13 @@ import { toast } from 'react-toastify'
 import { registrarDoacao } from '../../../../shared/services/doacaoService'
 import { Layout } from '../../../../shared/components/layout/Layout'
 import type { Produto } from '../../../../shared/types/shared.types'
+import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
 
 export default function ReceptorProdutos() {
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [busca, setBusca] = useState('')
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null)
+  const [loading, setLoading] = useState(true)
 
   const carregarProdutos = async () => {
     try {
@@ -19,10 +21,13 @@ export default function ReceptorProdutos() {
       setProdutos(data)
     } catch (error) {
       toast.error('Erro ao carregar produtos disponíveis.')
+    } finally {
+      setLoading(false)
     }
   }
 
   useEffect(() => {
+    setLoading(true)
     carregarProdutos()
   }, [])
 
@@ -52,6 +57,9 @@ const produtosFiltrados = produtos.filter((produto) => {
     }
   }
 
+   if (loading) return <FullPageLoader/>
+  
+
   return (
     <Layout>
       <div className="flex flex-col gap-6">
@@ -71,7 +79,7 @@ const produtosFiltrados = produtos.filter((produto) => {
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
             placeholder="Buscar por nome do produto..."
-            className="w-full sm:w-1/2 border border-gray-300 px-3 py-2 rounded-md text-sm"
+            className="w-lvh h-15 border border-gray-300 px-3 py-2 rounded-md text-sm"
           />
           <ProdutoFiltro
             tipoSelecionado={filtroTipo}
