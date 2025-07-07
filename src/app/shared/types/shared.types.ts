@@ -3,7 +3,7 @@ import type { TipoProduto, UnidadeMedida } from "./enums"
 export type Produto = {
   id: null | undefined
   _count: any
-  idProduto: number
+  idProduto: string
   descricao: string
   quantidade: number
   imagem?: string

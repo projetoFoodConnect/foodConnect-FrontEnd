@@ -13,9 +13,11 @@ interface NovaDoacaoPayload {
 
 export async function registrarDoacao(payload: NovaDoacaoPayload) {
   try {
+    console.log("[registrarDoacao] Enviando payload:", payload)
     const response = await api.post("/doacao", payload, {
       withCredentials: true,
     })
+    console.log("[registrarDoacao] Resposta recebida:", response.data)
     return response.data
   } catch (error) {
     console.error("[registrarDoacao] Erro ao registrar doação:", error)

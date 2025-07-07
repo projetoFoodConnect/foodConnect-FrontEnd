@@ -44,14 +44,14 @@ const produtosFiltrados = produtos.filter((produto) => {
 
     try {
       await registrarDoacao({
-        idProduto: String(produtoSelecionado.idProduto),
+        idProduto: (produtoSelecionado.idProduto),
         quantidade,
         dataPlanejada,
       })
-
-      toast.success('Reserva realizada com sucesso!')
+      
       setProdutoSelecionado(null)
       carregarProdutos()
+      toast.success('Reserva realizada com sucesso!')
     } catch (error) {
       toast.error('Erro ao reservar produto.')
     }
