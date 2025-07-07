@@ -14,7 +14,6 @@ import { toast } from 'react-toastify'
 import type { ProdutoForm } from '../../../../shared/types/produto.types'
 import { ProdutoForme } from '../components/ProdutoForme'
 import { ProdutoDetalhesModal } from '../components/ProdutoDetalhesModal'
-import { ProdutoFormModal } from '../components/ProdutoFormModal'
 import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
 
 export function DoadorProdutos() {
@@ -144,9 +143,12 @@ const handleExcluir = async (idProduto: string) => {
                 onCancel={() => {
                   setModoForm(false)
                   setProdutoSelecionado(null)
-                } } onExcluir={function (): Promise<void> {
-                  throw new Error('Function not implemented.')
-                } }              />
+                }}
+                onExcluir={function (): Promise<void> {
+                  if (!produtoSelecionado) return Promise.resolve()
+                  return handleExcluir(String(produtoSelecionado.idProduto))
+                }}
+              />
             </div>
           </div>
         )}
@@ -192,8 +194,8 @@ const handleExcluir = async (idProduto: string) => {
 
             {/* Modal de Formulário */}
             {modoForm && (
-              <ProdutoFormModal
-                produto={
+              <ProdutoForme
+                initialData={
                   produtoSelecionado
                     ? { ...produtoSelecionado, imagem: null }
                     : undefined

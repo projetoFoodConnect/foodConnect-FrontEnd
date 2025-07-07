@@ -45,6 +45,21 @@ export function StatusEditor({ doacao, onClose, onAtualizado }: Props) {
     }
   }
 
+  const atualizarPendente = async () => {
+    setLoading(true)
+    try {
+      await atualizarStatusDoacao(doacao.idDoacao, 'PENDENTE')
+      toast.success('Doação marcada como pendente.')
+      onAtualizado()
+      onClose()
+    } catch (error) {
+      console.error(error)
+      toast.error('Erro ao marcar como pendente.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleCancelar = async () => {
     if (!confirm('Tem certeza que deseja cancelar esta doação?')) return
     setLoading(true)
@@ -62,7 +77,7 @@ export function StatusEditor({ doacao, onClose, onAtualizado }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/5 z-50 flex items-center justify-center px-4">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
         <h2 className="text-lg font-bold mb-4">Editar Doação</h2>
 
@@ -88,13 +103,25 @@ export function StatusEditor({ doacao, onClose, onAtualizado }: Props) {
           />
         </div>
 
-        <button
-          onClick={handleRecebida}
-          disabled={loading}
-          className="w-full mb-4 bg-green-100 text-green-700 hover:bg-green-200 text-sm py-2 rounded font-medium"
-        >
-          Marcar como Recebida
-        </button>
+        {doacao.status === "PENDENTE" && (
+          <button
+            onClick={handleRecebida}
+            disabled={loading}
+            className="w-full mb-4 bg-green-100 text-green-700 hover:bg-green-200 text-sm py-2 rounded font-medium"
+          >
+            Marcar como Entregue
+          </button>
+        )}
+        {doacao.status === "PLANEJADA" && (
+          <button
+            onClick={atualizarPendente}
+            disabled={loading}
+            className="w-full mb-4 bg-yellow-100 text-yellow-700 hover:bg-yellow-200 text-sm py-2 rounded font-medium"
+          >
+            Aprovar Doação
+            <p className='text-xs text-yellow-500 mb-1 mt-1'>Tornar pendente</p>
+          </button>
+        )}
 
         <div className="flex justify-between gap-2">
           <button

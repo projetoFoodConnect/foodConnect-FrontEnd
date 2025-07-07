@@ -77,6 +77,14 @@ export async function atualizarStatusDoacao(
       )
     }
 
+    if (novoStatus === 'PENDENTE') {
+      return await api.put(
+        `/doacao/${idDoacao}`,
+        { status: 'PENDENTE' },
+        { withCredentials: true }
+      )
+    }
+
     const payload: any = {}
     if (quantidade !== undefined) payload.quantidade = quantidade
     if (dataPlanejada) payload.dataPlanejada = dataPlanejada
