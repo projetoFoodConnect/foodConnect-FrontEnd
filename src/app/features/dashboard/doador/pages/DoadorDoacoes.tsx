@@ -9,14 +9,12 @@ import {
   CalendarDays,
 } from 'lucide-react'
 import { toast } from 'react-toastify'
-
 import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
 import { Layout } from '../../../../shared/components/layout/Layout'
 import type { Doacao } from '../../../../shared/types/shared.types'
 import { cn } from '../../../../../lib/utils'
 import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
 import { StatusEditor } from '../components/StatusEditor'
-
 
 export default function DoadorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
@@ -25,7 +23,6 @@ export default function DoadorDoacoes() {
   const [loading, setLoading] = useState(true)
   const [modalAberto, setModalAberto] = useState(false)
   const [doacaoSelecionada, setDoacaoSelecionada] = useState<Doacao | null>(null)
-
 
   const carregar = async () => {
     try {
@@ -112,7 +109,7 @@ export default function DoadorDoacoes() {
                     {d.produto.descricao}
                   </h2>
                   <p className="text-sm text-gray-600">
-                    {Number(d.produto.quantidade).toFixed(3).replace(/\.?0+$/, "")} {d.produto.unidade} • Coleta: {new Date(d.dataPlanejada).toLocaleDateString('pt-BR')}
+                    {d.quantidade} {d.produto.unidade} • Coleta: {new Date(d.dataPlanejada).toLocaleDateString('pt-BR')}
                   </p>
                     <p className="text-sm text-gray-400 flex items-center gap-1 mt-1">
                     <CalendarDays size={14} />
