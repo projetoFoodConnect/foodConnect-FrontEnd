@@ -1,4 +1,4 @@
-import { BadgeCheck, XCircle } from 'lucide-react'
+import { BadgeCheck, Check, CheckCircle, XCircle } from 'lucide-react'
 
 type ProdutoCardProps = {
   imagem: string
@@ -29,7 +29,7 @@ export function ProdutoCard({
   const statusLabel = {
     DISPONIVEL: { texto: 'Disponível', cor: 'text-green-600', icone: <BadgeCheck size={14} /> },
     INDISPONIVEL: { texto: 'Indisponível', cor: 'text-gray-500', icone: <XCircle size={14} /> },
-    DOADO: { texto: 'Doado', cor: 'text-blue-600', icone: '✔️' },
+    DOADO: { texto: 'Doado', cor: 'text-blue-600', icone: <CheckCircle size={14} /> },
   }
 
   const statusAtual = statusLabel[status as keyof typeof statusLabel] || {
@@ -67,7 +67,7 @@ export function ProdutoCard({
         Cadastrado em {formatarData(dataCadastro)}
       </p>
 
-      <p className={`text-sm font-medium mt-1 flex items-center gap-1 ${statusAtual.cor}`}>
+      <p className={`text-sm font-medium mt-1 flex items-center ${statusAtual.cor}`}>
         {statusAtual.icone} {statusAtual.texto}
       </p>
     </div>

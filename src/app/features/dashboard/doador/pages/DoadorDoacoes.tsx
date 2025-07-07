@@ -6,6 +6,7 @@ import {
   Search,
   X,
   Pencil,
+  CalendarDays,
 } from 'lucide-react'
 import { toast } from 'react-toastify'
 
@@ -44,18 +45,18 @@ export default function DoadorDoacoes() {
     carregar()
   }, [])
 
-  const handleStatusChange = async (id: number, novoStatus: Doacao['status']) => {
-    setLoadingId(id)
-    try {
-      await atualizarStatusDoacao(id, novoStatus)
-      toast.success('Status atualizado com sucesso!')
-      await carregar()
-    } catch (error) {
-      toast.error('Erro ao atualizar status.')
-    } finally {
-      setLoadingId(null)
-    }
-  }
+  // const handleStatusChange = async (id: number, novoStatus: Doacao['status']) => {
+  //   setLoadingId(id)
+  //   try {
+  //     await atualizarStatusDoacao(id, novoStatus)
+  //     toast.success('Status atualizado com sucesso!')
+  //     await carregar()
+  //   } catch (error) {
+  //     toast.error('Erro ao atualizar status.')
+  //   } finally {
+  //     setLoadingId(null)
+  //   }
+  // }
 
   const filtradas = doacoes.filter((d) => {
     const matchBusca = d.produto.descricao.toLowerCase().includes(busca.toLowerCase())
@@ -108,40 +109,20 @@ export default function DoadorDoacoes() {
                 key={d.idDoacao}
                 className="bg-white rounded-xl shadow-sm p-4 flex flex-col md:flex-row gap-4"
               >
-                <div className="flex-1">
+                <div className="flex-1 ">
                   <h2 className="text-lg font-semibold text-green-800">
                     {d.produto.descricao}
                   </h2>
                   <p className="text-sm text-gray-600">
-                    {d.produto.quantidade} {d.produto.unidade}
+                    {Number(d.produto.quantidade).toFixed(3).replace(/\.?0+$/, "")} {d.produto.unidade} • Coleta: {new Date(d.dataPlanejada).toLocaleDateString('pt-BR')}
                   </p>
-                  <p className="text-sm text-gray-500">
-                    Coleta: {new Date(d.dataPlanejada).toLocaleDateString('pt-BR')}
-                  </p>
-                  <p className="text-sm text-gray-400">
+                    <p className="text-sm text-gray-400 flex items-center gap-1 mt-1">
+                    <CalendarDays size={14} />
                     Reservado em {new Date(d.dataReserva).toLocaleDateString('pt-BR')}
-                  </p>
+                    </p>
                   <p className="text-sm text-gray-500 mt-1">
                     Destinado a: {d.receptor?.nome || 'Desconhecido'}
                   </p>
-
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {(['PLANEJADA', 'PENDENTE', 'RECEBIDA', 'CANCELADA'] as const).map((status) => (
-                      <button
-                        key={status}
-                        disabled={loadingId === d.idDoacao}
-                        onClick={() => handleStatusChange(d.idDoacao, status)}
-                        className={cn(
-                          'text-xs px-3 py-1 rounded border transition',
-                          d.status === status
-                            ? 'bg-gray-200 border-gray-300 text-gray-700'
-                            : 'bg-white border-gray-300 text-gray-600'
-                        )}
-                      >
-                        {status}
-                      </button>
-                    ))}
-                  </div>
                 </div>
 
                 {/* STATUS badge */}

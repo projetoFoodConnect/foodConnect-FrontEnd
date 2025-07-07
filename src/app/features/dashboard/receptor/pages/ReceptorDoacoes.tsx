@@ -45,8 +45,8 @@ export function ReceptorDoacoes() {
     },
   }
 
-const carregar = async () => {
-    setLoading(true) // ✅ inicia carregamento
+  const carregar = async () => {
+    setLoading(true)
     try {
       const { doacoes } = await getMinhasDoacoes()
       const agora = new Date()
@@ -62,7 +62,7 @@ const carregar = async () => {
     } catch (error) {
       toast.error('Erro ao carregar doações.')
     } finally {
-      setLoading(false) 
+      setLoading(false)
     }
   }
 
@@ -147,9 +147,8 @@ const carregar = async () => {
               return (
                 <div
                   key={d.idDoacao}
-                  className="flex gap-4 bg-white rounded-lg shadow-sm p-4"
+                  className="bg-white rounded-xl shadow-sm p-4 flex flex-col md:flex-row gap-4"
                 >
-
                   <div className="flex-1">
                     <h2 className="text-lg font-semibold text-green-800">{d.produto.descricao}</h2>
 
@@ -162,7 +161,7 @@ const carregar = async () => {
                       Doador: {d.doador.nome || 'Organização desconhecida'}
                     </p>
 
-                    <p className="text-xs text-gray-400 flex items-center gap-1 mt-1">
+                    <p className="text-xs text-gray-400">
                       <CalendarDays size={14} />
                       Registrado em {new Date(d.dataReserva).toLocaleDateString('pt-BR')}
                     </p>

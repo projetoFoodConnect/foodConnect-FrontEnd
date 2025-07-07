@@ -1,4 +1,4 @@
-import { X, ShoppingCart } from "lucide-react"
+import { X, ShoppingCart, Package } from "lucide-react"
 import type { Produto } from "../../../../shared/types/shared.types"
 
 interface Props {
@@ -18,22 +18,25 @@ export function ProdutoDetalhesModal({ produto, onClose, onReservar }: Props) {
           <X />
         </button>
 
-        <h2 className="text-lg font-bold text-green-700 mb-4 flex items-center gap-2">
-          🧺 Detalhes do Produto
-        </h2>
+        <div className="flex items-center gap-2 mb-4">
+          <Package className="text-green-700" />
+          <h2 className="text-xl font-semibold text-green-800">Detalhes do Produto</h2>
+        </div>
 
         <img
-          src={produto.imagemUrl || produto.imagem || "/sem-imagem.png"}
+          src={produto.imagem || produto.imagem || "/sem-imagem.png"}
           alt={produto.descricao}
           className="w-full h-48 object-cover rounded mb-4"
         />
 
-        <p className="text-sm text-gray-600"><strong>Descrição:</strong> {produto.descricao}</p>
-        <p className="text-sm text-gray-600"><strong>Quantidade:</strong> {produto.quantidade} {produto.unidade}</p>
-        <p className="text-sm text-gray-600"><strong>Tipo:</strong> {produto.tipo}</p>
-        <p className="text-sm text-gray-600">
-          <strong>Postado em:</strong> {new Date(produto.dataPostagem).toLocaleDateString('pt-BR')}
-        </p>
+        <div className="space-y-2">
+          <p className="text-sm text-gray-600"><strong>Descrição:</strong> {produto.descricao}</p>
+          <p className="text-sm text-gray-600"><strong>Quantidade:</strong> {Number(produto.quantidade).toFixed(3).replace(/\.?0+$/, "")} {produto.unidade}</p>
+          <p className="text-sm text-gray-600"><strong>Tipo:</strong> {produto.tipo}</p>
+          <p className="text-sm text-gray-600">
+            <strong>Postado em:</strong> {new Date(produto.dataPostagem).toLocaleDateString('pt-BR')}
+          </p>
+        </div>
 
         <div className="mt-4 flex justify-end gap-2">
           <button

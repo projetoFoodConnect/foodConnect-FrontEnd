@@ -68,7 +68,7 @@ export function StatusEditor({ doacao, onClose, onAtualizado }: Props) {
 
         <div className="mb-4">
           <label className="text-sm">Quantidade:</label>
-          <p className='text-xs text-gray-400 mb-1'>Só pode ser alterada para um número menor.</p>
+          <p className='text-xs text-gray-400 mb-1'>Somente alterar para um número menor do que o atual.</p>
           <input
             type="number"
             min={1}
