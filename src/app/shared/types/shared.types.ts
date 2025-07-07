@@ -1,6 +1,8 @@
 import type { TipoProduto, UnidadeMedida } from "./enums"
 
 export type Produto = {
+  id: null | undefined
+  _count: any
   idProduto: number
   descricao: string
   quantidade: number

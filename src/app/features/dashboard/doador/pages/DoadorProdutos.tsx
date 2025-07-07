@@ -46,7 +46,6 @@ const carregarProdutos = async () => {
   }
 }
 
-
   useEffect(() => {
     carregarProdutos()
   }, [])
@@ -72,7 +71,7 @@ const carregarProdutos = async () => {
 
   const handleAtualizar = async (form: ProdutoForm) => {
     if (!produtoSelecionado) return
-    await atualizarProduto(produtoSelecionado.idProduto, form)
+    await atualizarProduto(String(produtoSelecionado.idProduto), form)
     await carregarProdutos()
     setModoForm(false)
     setProdutoSelecionado(null)
@@ -80,6 +79,9 @@ const carregarProdutos = async () => {
   }
 
 const handleExcluir = async (idProduto: string) => {
+  const confirmado = window.confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')
+  if (!confirmado) return
+
   try {
     await deletarProduto(idProduto)
     toast.success('Produto excluído com sucesso!')
@@ -142,8 +144,9 @@ const handleExcluir = async (idProduto: string) => {
                 onCancel={() => {
                   setModoForm(false)
                   setProdutoSelecionado(null)
-                }}
-              />
+                } } onExcluir={function (): Promise<void> {
+                  throw new Error('Function not implemented.')
+                } }              />
             </div>
           </div>
         )}
@@ -157,7 +160,7 @@ const handleExcluir = async (idProduto: string) => {
             {produtosFiltrados.map((produto) => (
               <ProdutoCard
                 key={produto.id}
-                imagem={produto.imagem}
+                imagem={produto.imagem ?? ''}
                 descricao={produto.descricao}
                 tipo={produto.tipo}
                 quantidade={produto.quantidade}
@@ -182,7 +185,7 @@ const handleExcluir = async (idProduto: string) => {
                   setMostrarDetalhes(false)
                   setModoForm(true)
                 }}
-
+                
                 onExcluir={handleExcluir}
               />
             )}
