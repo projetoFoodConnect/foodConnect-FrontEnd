@@ -1,11 +1,11 @@
-export type UnidadeMedida = 'KG' | 'L' | 'UNIDADE'
+export type UnidadeMedida = 'KG' | 'LITROS' | 'UNIDADES'
 export type TipoProduto = 'FRUTA' | 'VERDURA' | 'LEGUME' | 'NAO_PERECIVEL'
 export type StatusDoacao = 'PLANEJADA' | 'PENDENTE' | 'RECEBIDA'
 
 export const UnidadeMedidaLabels: Record<UnidadeMedida, string> = {
   KG: 'Kg',
-  L: 'Litros',
-  UNIDADE: 'Unidade'
+  LITROS: 'Litros',
+  UNIDADES: 'Unidades'
 }
 
 export const TipoProdutoLabels: Record<TipoProduto, string> = {

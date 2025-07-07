@@ -1,24 +1,21 @@
-import type { UnidadeMedida, TipoProduto } from "./enums"
+import type { TipoProduto, UnidadeMedida } from "./enums"
 
-
-export interface Produto {
-  _count: any
-  idProduto: string
-  dataPostagem: string
-  status: string
-  doacoes: any
-  imagem: string
-  id: string
+export type Produto = {
+  idProduto: number
   descricao: string
   quantidade: number
+  imagem?: string
   unidade: UnidadeMedida
   tipo: TipoProduto
-  imagemUrl?: string
-  createdAt: string
-  donoId: string
-  donoNome: string
-  donoOrganizacao: string
+  status: string
+  dataPostagem: string 
+  doador: {
+    idUsuario: number
+    nome: string
+    nomeOrganizacao: string
+  }
 }
+
 
 export type Doacao = {
   idDoacao: number
