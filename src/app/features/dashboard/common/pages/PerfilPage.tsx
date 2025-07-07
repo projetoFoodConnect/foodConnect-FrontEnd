@@ -95,12 +95,19 @@ export default function PerfilPage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium">Telefone</label>
+                            <label className="block text-sm font-medium">Telefone (ex: 89 99999-9999)</label>
                             <input
                                 name="telefone"
                                 value={form.telefone || ''}
-                                onChange={handleChange}
+                                onChange={e => {
+                                    // Permite apenas números, espaço e hífen
+                                    const filtered = e.target.value.replace(/[^\d -]/g, '')
+                                    setForm(form => form ? { ...form, telefone: filtered } : form)
+                                }}
                                 className="w-full border px-3 py-2 rounded"
+                                inputMode="text"
+                                pattern="[0-9 -]*"
+                                maxLength={15}
                             />
                         </div>
 
@@ -113,6 +120,18 @@ export default function PerfilPage() {
                                 className="w-full border px-3 py-2 rounded"
                             />
                         </div>
+
+                        <div>
+                            <label className="block text-sm font-medium">Endereço</label>
+                            <input
+                                name="endereco"
+                                value={form.endereco || ''}
+                                onChange={handleChange}
+                                className="w-full border px-3 py-2 rounded"
+                                placeholder="Rua, número, complemento"
+                            />
+                        </div>
+                    
                     </div>
 
                     <div className="mt-6 flex justify-end gap-2">
