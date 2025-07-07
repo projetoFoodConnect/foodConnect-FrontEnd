@@ -61,14 +61,12 @@ export async function atualizarStatusDoacao(
   dataPlanejada?: string
 ) {
   try {
-    // Se for apenas CANCELAR
     if (novoStatus === 'CANCELADA') {
       return await api.put(`/doacao/${idDoacao}/cancelar`, null, {
         withCredentials: true,
       })
     }
 
-    // Se for marcar como RECEBIDA
     if (novoStatus === 'RECEBIDA') {
       return await api.put(
         `/doacao/${idDoacao}`,
@@ -77,12 +75,10 @@ export async function atualizarStatusDoacao(
       )
     }
 
-    // Se não for CANCELADA nem RECEBIDA, assume que é edição simples (quantidade / data)
     const payload: any = {}
     if (quantidade !== undefined) payload.quantidade = quantidade
     if (dataPlanejada) payload.dataPlanejada = dataPlanejada
 
-    // ⚠️ se nenhum campo foi alterado, não faz requisição
     if (Object.keys(payload).length === 0) {
       throw new Error('Nada para atualizar.')
     }
