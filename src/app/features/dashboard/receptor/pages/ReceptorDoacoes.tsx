@@ -6,7 +6,6 @@ import {
   Hourglass,
   Pencil,
   Search,
-  X,
   XCircle,
 } from 'lucide-react'
 import { toast } from 'react-toastify'
@@ -21,7 +20,6 @@ export function ReceptorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
   const [busca, setBusca] = useState('')
   const [filtro, setFiltro] = useState<'TODOS' | Doacao['status']>('TODOS')
-  const [setLoadingId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [modalAberto, setModalAberto] = useState(false)
   const [selecionada, setSelecionada] = useState<Doacao | null>(null)

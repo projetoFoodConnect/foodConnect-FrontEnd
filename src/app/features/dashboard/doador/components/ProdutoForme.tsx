@@ -10,7 +10,7 @@ interface Props {
   onExcluir: (idProduto: string) => Promise<void>
 }
 
-export function ProdutoForme({ initialData, onSubmit, onCancel, onExcluir }: Props) {
+export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
   const [form, setForm] = useState<ProdutoForm>(
     initialData ?? {
       descricao: '',

@@ -44,7 +44,7 @@ const produtosFiltrados = produtos.filter((produto) => {
 
     try {
       await registrarDoacao({
-        idProduto: produtoSelecionado.idProduto,
+        idProduto: String(produtoSelecionado.idProduto),
         quantidade,
         dataPlanejada,
       })
