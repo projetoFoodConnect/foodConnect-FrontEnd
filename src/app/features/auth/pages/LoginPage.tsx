@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react'
 import { getHomePathByPerfil } from '../../../shared/utils/redirectByPerfil'
 import { useAuth } from '../hooks/useAuth'
+import logo from '../../../assets/logogreen.png'
 
 export default function LoginPage() {
     const { login, user } = useAuth()
@@ -41,10 +42,10 @@ export default function LoginPage() {
             {/* Logo e título */}
             <div className="text-center mb-8">
 
-                <h1 className="text-2xl font-bold text-green-800">FoodConnect</h1>
-                <p className="text-sm text-gray-600 mt-1">
-                    Conectando doadores e beneficiários para um mundo sem desperdício
-                </p>
+                <img src={logo} alt="FoodConnect Logo" className="w-48 mx-auto" />
+                {/* <p className="text-sm text-gray-600 mt-1">
+                    Conectando pessoas para um mundo sem desperdício
+                </p> */}
             </div>
 
             {/* Card */}
