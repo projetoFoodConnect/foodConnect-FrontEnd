@@ -4,23 +4,28 @@ import {
   CalendarDays,
   Clock,
   Hourglass,
+  Pencil,
   Search,
   X,
   XCircle,
 } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { Layout } from '../../../../shared/components/layout/Layout'
-import { getMinhasDoacoes, atualizarStatusDoacao } from '../../../../shared/services/doacaoService'
+import { editarDoacao, getMinhasDoacoes } from '../../../../shared/services/doacaoService'
 import type { Doacao } from '../../../../shared/types/shared.types'
 import { cn } from '../../../../../lib/utils'
 import { FullPageLoader } from '../../../../shared/components/ui/FullPageLoader'
+import { EditarDoacao } from '../components/EditarDoacao'
 
 export function ReceptorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
   const [busca, setBusca] = useState('')
   const [filtro, setFiltro] = useState<'TODOS' | Doacao['status']>('TODOS')
-  const [loadingId, setLoadingId] = useState<number | null>(null)
+  const [setLoadingId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
+  const [modalAberto, setModalAberto] = useState(false)
+  const [selecionada, setSelecionada] = useState<Doacao | null>(null)
+
 
   const statusInfo = {
     PLANEJADA: {
@@ -53,7 +58,7 @@ export function ReceptorDoacoes() {
 
       for (const d of doacoes) {
         if (d.status === 'PLANEJADA' && new Date(d.dataPlanejada) < agora) {
-          await atualizarStatusDoacao(d.idDoacao, 'PENDENTE')
+          await editarDoacao(d.idDoacao, { status: 'PENDENTE' })
         }
       }
 
@@ -69,20 +74,6 @@ export function ReceptorDoacoes() {
   useEffect(() => {
     carregar()
   }, [])
-
-  const handleCancelar = async (id: number) => {
-    if (!confirm('Cancelar esta doação?')) return
-    setLoadingId(id)
-    try {
-      await atualizarStatusDoacao(id, 'CANCELADA')
-      toast.success('Doação cancelada.')
-      await carregar()
-    } catch {
-      toast.error('Erro ao cancelar.')
-    } finally {
-      setLoadingId(null)
-    }
-  }
 
   const filtradas = doacoes.filter((d) => {
     const matchBusca = d.produto.descricao.toLowerCase().includes(busca.toLowerCase())
@@ -174,18 +165,28 @@ export function ReceptorDoacoes() {
                       {status.icone} {status.texto}
                     </span>
 
-                    {d.status !== 'RECEBIDA' && d.status !== 'CANCELADA' && (
-                      <button
-                        onClick={() => handleCancelar(d.idDoacao)}
-                        disabled={loadingId === d.idDoacao}
-                        className="text-red-600 hover:text-red-800"
-                        title="Cancelar"
-                      >
-                        <X size={16} />
-                      </button>
+                    <button
+                      onClick={() => {
+                        setSelecionada(d)
+                        setModalAberto(true)
+                      }}
+                      className="text-gray-500 hover:text-gray-700 mt-2 text-xs flex items-center gap-1"
+                    >
+                      <Pencil size={14} />
+                      Editar
+                    </button>
+
+                    {modalAberto && selecionada && (
+                      <EditarDoacao
+                        doacao={selecionada}
+                        onClose={() => setModalAberto(false)}
+                        onAtualizado={carregar}
+                      />
                     )}
+
                   </div>
                 </div>
+
               )
             })}
           </div>

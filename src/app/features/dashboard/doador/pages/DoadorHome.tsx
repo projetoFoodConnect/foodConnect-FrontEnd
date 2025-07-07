@@ -71,7 +71,7 @@ export function DoadorHome() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <button
             onClick={() => navigate('/produtos/doador')}
-            className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
+            className=" rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
           >
             <p className="font-medium text-green-800">Gerenciar Produtos</p>
             <p className="text-sm text-gray-600">Visualize e cadastre novos alimentos</p>
@@ -79,7 +79,7 @@ export function DoadorHome() {
 
           <button
             onClick={() => navigate('/doacoes/doador')}
-            className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
+            className=" rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
           >
             <p className="font-medium text-green-800">Minhas Doações</p>
             <p className="text-sm text-gray-600">Acompanhe suas entregas realizadas</p>
@@ -87,7 +87,7 @@ export function DoadorHome() {
 
           <button
             onClick={() => navigate('/produtos/doador')}
-            className="border rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
+            className=" rounded-xl p-4 bg-white hover:bg-green-50 transition text-left"
           >
             <p className="font-medium text-green-800">Cadastrar Produto</p>
             <p className="text-sm text-gray-600">Adicione novos itens ao estoque</p>

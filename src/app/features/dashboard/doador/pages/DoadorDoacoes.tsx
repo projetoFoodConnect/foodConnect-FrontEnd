@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'react-toastify'
 
-import { getMinhasDoacoes, atualizarStatusDoacao } from '../../../../shared/services/doacaoService'
+import { getMinhasDoacoes } from '../../../../shared/services/doacaoService'
 import { Layout } from '../../../../shared/components/layout/Layout'
 import type { Doacao } from '../../../../shared/types/shared.types'
 import { cn } from '../../../../../lib/utils'
@@ -22,11 +22,9 @@ export default function DoadorDoacoes() {
   const [doacoes, setDoacoes] = useState<Doacao[]>([])
   const [busca, setBusca] = useState('')
   const [filtro, setFiltro] = useState<'TODOS' | Doacao['status']>('TODOS')
-  const [loadingId, setLoadingId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [modalAberto, setModalAberto] = useState(false)
   const [doacaoSelecionada, setDoacaoSelecionada] = useState<Doacao | null>(null)
-
 
 
   const carregar = async () => {

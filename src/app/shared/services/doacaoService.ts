@@ -28,16 +28,30 @@ export async function getMinhasDoacoes(): Promise<MinhasDoacoesResponse> {
   return response.data 
 }
 
-export const editarDoacao = async (idDoacao: string, payload: Partial<Doacao>) => {
-  await api.put(`/doacao/${idDoacao}`, payload)
+
+export const cancelarDoacao = async (idDoacao: number) => {
+  return await api.put(`/doacao/${idDoacao}/cancelar`, null, {
+    withCredentials: true,
+  })
 }
 
-export const cancelarDoacao = async (idDoacao: string, justificativa: string) => {
-  await api.put(`/doacao/${idDoacao}/cancelar`, { justificativa })
+export const marcarComoRecebida = async (idDoacao: number) => {
+  await api.put(`/doacao/${idDoacao}/recebida`, null, {
+    withCredentials: true,
+  })
 }
 
-export const marcarComoRecebida = async (idDoacao: string) => {
-  await api.put(`/doacao/${idDoacao}/recebida`)
+export const editarDoacao = async (
+  idDoacao: number,
+  payload: { quantidade?: number; dataPlanejada?: string; status?: 'PLANEJADA' | 'PENDENTE' | 'RECEBIDA' | 'CANCELADA' }
+) => {
+  if (!payload.quantidade && !payload.dataPlanejada) {
+    throw new Error("Nada para atualizar.")
+  }
+
+  return await api.put(`/doacao/${idDoacao}`, payload, {
+    withCredentials: true,
+  })
 }
 
 export async function atualizarStatusDoacao(
