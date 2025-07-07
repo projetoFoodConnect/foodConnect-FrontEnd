@@ -50,7 +50,7 @@ export function DoadorHome() {
 
         {/* Resumo das Atividades */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="border rounded-xl p-4 bg-green-50 flex items-center gap-4">
+          <div className=" rounded-xl p-4 bg-green-50 flex items-center gap-4">
             <Package className="text-green-700 w-6 h-6" />
             <div>
               <p className="text-xl font-bold text-green-900">{produtos.length}</p>
@@ -58,11 +58,11 @@ export function DoadorHome() {
             </div>
           </div>
 
-          <div className="border rounded-xl p-4 bg-red-50 flex items-center gap-4">
+          <div className=" rounded-xl p-4 bg-red-50 flex items-center gap-4">
             <Heart className="text-red-700 w-6 h-6" />
             <div>
               <p className="text-xl font-bold text-red-900">{doacoes.length}</p>
-              <p className="text-sm text-gray-600">Doações realizadas</p>
+              <p className="text-sm text-gray-600">Doações planejadas</p>
             </div>
           </div>
         </div>

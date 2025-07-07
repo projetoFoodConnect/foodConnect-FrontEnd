@@ -161,7 +161,7 @@ export function ReceptorDoacoes() {
                       Doador: {d.doador.nome || 'Organização desconhecida'}
                     </p>
 
-                    <p className="text-xs text-gray-400">
+                    <p className="text-sm text-gray-400 flex items-center gap-1 mt-1">
                       <CalendarDays size={14} />
                       Registrado em {new Date(d.dataReserva).toLocaleDateString('pt-BR')}
                     </p>
