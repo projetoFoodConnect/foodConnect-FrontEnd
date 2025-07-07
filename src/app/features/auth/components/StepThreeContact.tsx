@@ -90,16 +90,22 @@ export default function StepThreeContact({ formData, atualizarDados, onVoltar }:
               className="w-full mt-1 border rounded-md px-4 py-2 text-sm"
             />
           </div>
-          <div>
+            <div>
             <label className="text-sm font-medium">Telefone *</label>
             <input
               type="tel"
               placeholder="(11) 99999-9999"
               value={formData.telefone || ''}
-              onChange={(e) => atualizarDados({ telefone: e.target.value })}
+              onChange={(e) => {
+              // Remove tudo que não for número
+              const onlyNumbers = e.target.value.replace(/\D/g, '')
+              atualizarDados({ telefone: onlyNumbers })
+              }}
               className="w-full mt-1 border rounded-md px-4 py-2 text-sm"
+              inputMode="numeric"
+              pattern="[0-9]*"
             />
-          </div>
+            </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
