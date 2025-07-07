@@ -1,4 +1,4 @@
-import { BadgeCheck, Check, CheckCircle, XCircle } from 'lucide-react'
+import { BadgeCheck, CheckCircle, XCircle } from 'lucide-react'
 
 type ProdutoCardProps = {
   imagem: string

@@ -6,7 +6,7 @@ interface Props {
   produto: Produto | null
   onClose: () => void
   onEditar: (produto: Produto) => void
-  onExcluir: (idProduto: number) => Promise<void>
+  onExcluir: (idProduto: string) => Promise<void>
 }
 
 export function ProdutoDetalhesModal({ produto, onClose, onEditar, onExcluir }: Props) {
@@ -91,7 +91,7 @@ const status = statusInfo[produto.status as keyof typeof statusInfo] || {
         {/* Botões */}
         <div className="flex justify-between mt-6">
           <button
-            onClick={() => onExcluir(produto.idProduto)}
+            onClick={() => onExcluir(String(produto.idProduto))}
             className="flex items-center gap-1 px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
           >
             <Trash2 size={16} /> Excluir
