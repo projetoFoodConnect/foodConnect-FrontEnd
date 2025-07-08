@@ -167,7 +167,6 @@ const handleExcluir = async (idProduto: string) => {
                 tipo={produto.tipo}
                 quantidade={produto.quantidade}
                 unidade={produto.unidade}
-                reservas={produto._count?.doacoes || 0}
                 dataCadastro={produto.dataPostagem}
                 status={produto.status}
                 onClick={() => {
