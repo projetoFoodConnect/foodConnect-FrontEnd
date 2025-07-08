@@ -6,7 +6,6 @@ type ProdutoCardProps = {
   tipo: string
   quantidade: number
   unidade: string
-  reservas?: number
   dataCadastro: string
   status: string
   onClick?: () => void
@@ -18,7 +17,6 @@ export function ProdutoCard({
   tipo,
   quantidade,
   unidade,
-  reservas,
   dataCadastro,
   status,
   onClick,
@@ -58,10 +56,6 @@ export function ProdutoCard({
       <p className="text-sm text-gray-600 mt-1">
         {quantidade} {unidade}
       </p>
-
-      {typeof reservas === 'number' && (
-        <p className="text-sm text-gray-600">{reservas} reservas</p>
-      )}
 
       <p className="text-xs text-gray-500 mt-2">
         Cadastrado em {formatarData(dataCadastro)}
