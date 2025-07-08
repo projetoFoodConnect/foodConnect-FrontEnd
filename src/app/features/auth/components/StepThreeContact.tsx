@@ -62,7 +62,7 @@ export default function StepThreeContact({ formData, atualizarDados, onVoltar }:
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="text-center">
         <h2 className="text-xl font-semibold">Informações de Contato</h2>
         <p className="text-sm text-gray-500">Dados pessoais</p>
       </div>

@@ -40,19 +40,6 @@ export default function DoadorDoacoes() {
     carregar()
   }, [])
 
-  // const handleStatusChange = async (id: number, novoStatus: Doacao['status']) => {
-  //   setLoadingId(id)
-  //   try {
-  //     await atualizarStatusDoacao(id, novoStatus)
-  //     toast.success('Status atualizado com sucesso!')
-  //     await carregar()
-  //   } catch (error) {
-  //     toast.error('Erro ao atualizar status.')
-  //   } finally {
-  //     setLoadingId(null)
-  //   }
-  // }
-
   const filtradas = doacoes.filter((d) => {
     const matchBusca = d.produto.descricao.toLowerCase().includes(busca.toLowerCase())
     const matchFiltro = filtro === 'TODOS' || d.status === filtro
@@ -63,10 +50,10 @@ export default function DoadorDoacoes() {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-bold">Minhas Doações</h1>
-          <div className="relative w-full max-w-xs">
+      <div className="max-w-6xl mx-auto px-2 py-3 md:px-4 md:py-6">
+        <div className="flex flex-col gap-3 md:flex-row md:justify-between md:items-center mb-4">
+          <h1 className="text-lg md:text-xl font-bold">Minhas Doações</h1>
+          <div className="relative w-full max-w-full md:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
@@ -84,7 +71,7 @@ export default function DoadorDoacoes() {
               key={status}
               onClick={() => setFiltro(status)}
               className={cn(
-                'px-4 py-1 border border-gray-300 rounded text-sm',
+                'px-3 py-1 border border-gray-300 rounded text-xs md:text-sm',
                 filtro === status
                   ? 'bg-green-600 text-white border-green-700'
                   : 'bg-white text-gray-600 hover:bg-gray-100'
@@ -98,24 +85,24 @@ export default function DoadorDoacoes() {
         {filtradas.length === 0 ? (
           <p className="text-center text-sm text-gray-500 mt-4">Nenhuma doação encontrada.</p>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-3 md:gap-4">
             {filtradas.map((d) => (
               <div
                 key={d.idDoacao}
-                className="bg-white rounded-xl shadow-sm p-4 flex flex-col md:flex-row gap-4"
+                className="bg-white rounded-xl shadow-sm p-3 md:p-4 flex flex-col md:flex-row gap-3 md:gap-4"
               >
-                <div className="flex-1 ">
-                  <h2 className="text-lg font-semibold text-green-800">
+                <div className="flex-1">
+                  <h2 className="text-base md:text-lg font-semibold text-green-800">
                     {d.produto.descricao}
                   </h2>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs md:text-sm text-gray-600">
                     {d.quantidade} {d.produto.unidade} • Coleta: {new Date(d.dataPlanejada).toLocaleDateString('pt-BR')}
                   </p>
-                    <p className="text-sm text-gray-400 flex items-center gap-1 mt-1">
+                  <p className="text-xs md:text-sm text-gray-400 flex items-center gap-1 mt-1">
                     <CalendarDays size={14} />
                     Reservado em {new Date(d.dataReserva).toLocaleDateString('pt-BR')}
-                    </p>
-                  <p className="text-sm text-gray-500 mt-1">
+                  </p>
+                  <p className="text-xs md:text-sm text-gray-500 mt-1">
                     Destinado a: {d.receptor?.nome || 'Desconhecido'}
                   </p>
                 </div>
@@ -158,7 +145,6 @@ export default function DoadorDoacoes() {
                     onAtualizado={carregar}
                   />
                 )}
-
               </div>
             ))}
           </div>

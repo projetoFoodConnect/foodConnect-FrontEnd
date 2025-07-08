@@ -24,7 +24,6 @@ export function ReceptorDoacoes() {
   const [modalAberto, setModalAberto] = useState(false)
   const [selecionada, setSelecionada] = useState<Doacao | null>(null)
 
-
   const statusInfo = {
     PLANEJADA: {
       texto: 'Planejado',
@@ -83,17 +82,17 @@ export function ReceptorDoacoes() {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <h1 className="text-2xl font-bold mb-2">Minhas Doações</h1>
-        <p className="text-sm text-muted-foreground mb-4">Acompanhe suas reservas de alimentos</p>
+      <div className="max-w-6xl mx-auto px-2 sm:px-6 py-4 sm:py-8">
+        <h1 className="text-xl sm:text-2xl font-bold mb-2">Minhas Doações</h1>
+        <p className="text-xs sm:text-sm text-muted-foreground mb-4">Acompanhe suas reservas de alimentos</p>
 
-        <div className="flex flex-wrap justify-between items-center mb-6 gap-3">
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col sm:flex-row flex-wrap sm:justify-between items-stretch sm:items-center mb-6 gap-3">
+          <div className="flex flex-wrap gap-2 mb-2 sm:mb-0">
             {(['TODOS', 'PLANEJADA', 'PENDENTE', 'RECEBIDA', 'CANCELADA'] as const).map((s) => (
               <button
                 key={s}
                 className={cn(
-                  'px-4 py-1 rounded-sm border border-gray-200 text-sm',
+                  'px-3 sm:px-4 py-1 rounded-sm border border-gray-200 text-xs sm:text-sm',
                   filtro === s
                     ? 'bg-green-600 text-white border-green-700'
                     : 'bg-white text-gray-600 hover:bg-gray-100'
@@ -121,42 +120,42 @@ export function ReceptorDoacoes() {
               placeholder="Buscar por produto..."
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-sm border border-gray-300 text-sm w-full"
+              className="pl-10 pr-4 py-2 rounded-sm border border-gray-300 text-xs sm:text-sm w-full"
             />
           </div>
         </div>
 
         {filtradas.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center mt-6">Nenhuma doação encontrada.</p>
+          <p className="text-xs sm:text-sm text-gray-500 text-center mt-6">Nenhuma doação encontrada.</p>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-3 sm:gap-4">
             {filtradas.map((d) => {
               const status = statusInfo[d.status as keyof typeof statusInfo]
 
               return (
                 <div
                   key={d.idDoacao}
-                  className="bg-white rounded-xl shadow-sm p-4 flex flex-col md:flex-row gap-4"
+                  className="bg-white rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-4 flex flex-col md:flex-row gap-3 sm:gap-4"
                 >
                   <div className="flex-1">
-                    <h2 className="text-lg font-semibold text-green-800">{d.produto.descricao}</h2>
+                    <h2 className="text-base sm:text-lg font-semibold text-green-800">{d.produto.descricao}</h2>
 
-                    <p className="text-sm text-gray-600">
+                    <p className="text-xs sm:text-sm text-gray-600">
                       {d.quantidade} {d.produto.unidade} • Coleta:{' '}
                       {new Date(d.dataPlanejada).toLocaleDateString('pt-BR')}
                     </p>
 
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
                       Doador: {d.doador.nome || 'Organização desconhecida'}
                     </p>
 
-                    <p className="text-sm text-gray-400 flex items-center gap-1 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-400 flex items-center gap-1 mt-1">
                       <CalendarDays size={14} />
                       Registrado em {new Date(d.dataReserva).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
 
-                  <div className="flex flex-col items-end justify-between">
+                  <div className="flex flex-row md:flex-col items-end md:items-end justify-between gap-2 md:gap-0">
                     <span
                       className={`text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1 ${status.cor}`}
                     >
@@ -168,7 +167,7 @@ export function ReceptorDoacoes() {
                         setSelecionada(d)
                         setModalAberto(true)
                       }}
-                      className="text-gray-500 hover:text-gray-700 mt-2 text-xs flex items-center gap-1"
+                      className="text-gray-500 hover:text-gray-700 mt-0 md:mt-2 text-xs flex items-center gap-1"
                     >
                       <Pencil size={14} />
                       Editar

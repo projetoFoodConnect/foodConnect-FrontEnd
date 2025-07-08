@@ -51,59 +51,59 @@ export default function StepOneProfile({ formData, atualizarDados, onContinuar }
     </button>
   )
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-semibold">Tipo de Conta</h2>
-        <p className="text-sm text-gray-500">Escolha seu perfil</p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <CardPerfil
-          tipo="DOADOR"
-          titulo="Sou Doador"
-          descricao={[
-            'Cadastrar produtos disponíveis',
-            'Gerenciar doações',
-            'Acompanhar entregas',
-            'Relatórios de impacto',
-          ]}
-          icone={<PackageSearch size={20} />}
-          isSelecionado={selecionado === 'DOADOR'}
-        />
-        <CardPerfil
-          tipo="RECEPTOR"
-          titulo="Sou Receptor"
-          descricao={[
-            'Buscar produtos disponíveis',
-            'Reservar doações',
-            'Agendar coletas',
-            'Histórico de recebimentos',
-          ]}
-          icone={<HandHelping size={20} />}
-          isSelecionado={selecionado === 'RECEPTOR'}
-        />
-      </div>
-
-      <div className="flex justify-end">
-        <button
-          type="button"
-          onClick={onContinuar}
-          disabled={!selecionado}
-          className={`bg-green-700 hover:bg-green-800 text-white font-medium px-6 py-2 rounded-md flex items-center gap-2 transition ${
-            !selecionado ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-        >
-          Continuar →
-        </button>
-      </div>
-
-      <p className="text-sm text-center text-gray-600">
-        Já tem uma conta?{' '}
-        <a onClick={irLogin} className="text-green-700 hover:underline font-medium">
-          Fazer login
-        </a>
-      </p>
+ return (
+  <div className="space-y-6">
+    <div className="text-center">
+      <h2 className="text-xl sm:text-2xl font-semibold">Tipo de Conta</h2>
+      <p className="text-sm sm:text-base text-gray-500">Escolha seu perfil</p>
     </div>
-  )
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <CardPerfil
+        tipo="DOADOR"
+        titulo="Sou Doador"
+        descricao={[
+          'Cadastrar produtos disponíveis',
+          'Gerenciar doações',
+          'Acompanhar entregas',
+          'Relatórios de impacto',
+        ]}
+        icone={<PackageSearch size={20} />}
+        isSelecionado={selecionado === 'DOADOR'}
+      />
+      <CardPerfil
+        tipo="RECEPTOR"
+        titulo="Sou Receptor"
+        descricao={[
+          'Buscar produtos disponíveis',
+          'Reservar doações',
+          'Agendar coletas',
+          'Histórico de recebimentos',
+        ]}
+        icone={<HandHelping size={20} />}
+        isSelecionado={selecionado === 'RECEPTOR'}
+      />
+    </div>
+
+    <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
+      <button
+        type="button"
+        onClick={onContinuar}
+        disabled={!selecionado}
+        className={`w-full sm:w-auto bg-green-700 hover:bg-green-800 text-white font-medium px-6 py-2 rounded-md flex items-center justify-center gap-2 transition ${
+          !selecionado ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
+      >
+        Continuar →
+      </button>
+    </div>
+
+    <p className="text-sm text-center text-gray-600">
+      Já tem uma conta?{' '}
+      <a onClick={irLogin} className="text-green-700 hover:underline font-medium cursor-pointer">
+        Fazer login
+      </a>
+    </p>
+  </div>
+)
 }

@@ -47,7 +47,7 @@ export default function StepTwoOrganization({
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className='text-center'>
         <h2 className="text-xl font-semibold">Dados da Organização</h2>
         <p className="text-sm text-gray-500">Informações básicas</p>
       </div>

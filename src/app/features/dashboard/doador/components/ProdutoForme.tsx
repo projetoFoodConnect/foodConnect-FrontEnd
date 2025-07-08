@@ -1,8 +1,7 @@
-import { useState, type ChangeEvent, } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import { validarProdutoForm } from '../utils/validators'
 import { type ProdutoForm } from '../../../../shared/types/produto.types'
 import { LoadingButton } from '../../../../shared/components/ui/LoadingButton'
-
 
 interface Props {
   initialData?: ProdutoForm
@@ -25,10 +24,8 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
   const [erros, setErros] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
 
-
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-
     setForm((prev) => ({
       ...prev,
       [name]: name === 'quantidade' ? Number(value) : value,
@@ -51,16 +48,15 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
       setErros(errosValidacao)
       setLoading(false)
       return
-    } 
+    }
     setErros([])
     onSubmit(form)
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-
-      <div className="bg-white rounded-lg p-6 shadow-md max-w-xl w-full">
-        <h2 className="text-xl font-bold mb-4">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-2 sm:px-0">
+      <div className="bg-white rounded-lg p-4 sm:p-6 shadow-md w-full max-w-md sm:max-w-xl">
+        <h2 className="text-lg sm:text-xl font-bold mb-4">
           {initialData ? 'Editar Produto' : 'Cadastrar Produto'}
         </h2>
 
@@ -77,7 +73,7 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
             />
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <label className="block text-sm font-medium">Quantidade*</label>
               <input
@@ -123,8 +119,7 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
           <div>
             <label className="block w-full">
               <span className="text-sm font-medium block mb-1">Imagem (opcional)</span>
-              <div className="border border-dashed  rounded-md p-2 hover:bg-gray-100 cursor-pointer text-center">
-
+              <div className="border border-dashed rounded-md p-2 hover:bg-gray-100 cursor-pointer text-center">
                 <input
                   type="file"
                   accept="image/*"
@@ -134,7 +129,6 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
                 <label className="cursor-pointer text-sm text-green-700 hover:underline">
                   Clique para selecionar uma imagem
                 </label>
-
                 {form.imagem && (
                   <p className="text-xs text-gray-500 mt-1 truncate">
                     Arquivo selecionado: {form.imagem.name}
@@ -154,7 +148,7 @@ export function ProdutoForme({ initialData, onSubmit, onCancel }: Props) {
             </div>
           )}
 
-          <div className="flex justify-end gap-2 mt-4">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
             <button
               onClick={onCancel}
               className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
