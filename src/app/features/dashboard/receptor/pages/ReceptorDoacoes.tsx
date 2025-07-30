@@ -49,34 +49,49 @@ export function ReceptorDoacoes() {
 
   const carregar = async () => {
     setLoading(true)
+    console.log('carregar: iniciando')
     try {
       const { doacoes } = await getMinhasDoacoes()
+      console.log('carregar: doacoes recebidas', doacoes)
       const agora = new Date()
 
       for (const d of doacoes) {
+        console.log('carregar: verificando doacao', d)
         if (d.status === 'PLANEJADA' && new Date(d.dataPlanejada) < agora) {
+          console.log('carregar: editando doacao para PENDENTE', d.idDoacao)
           await editarDoacao(d.idDoacao, { status: 'PENDENTE' })
         }
       }
 
       const atualizadas = await getMinhasDoacoes()
+      console.log('carregar: doacoes atualizadas', atualizadas.doacoes)
       setDoacoes(atualizadas.doacoes)
     } catch (error) {
+      console.log('carregar: erro', error)
       toast.error('Erro ao carregar doações.')
     } finally {
       setLoading(false)
+      console.log('carregar: loading finalizado')
     }
   }
 
   useEffect(() => {
+    console.log('useEffect: montando componente')
     carregar()
   }, [])
 
   const filtradas = doacoes.filter((d) => {
     const matchBusca = d.produto.descricao.toLowerCase().includes(busca.toLowerCase())
     const matchStatus = filtro === 'TODOS' || d.status === filtro
+    console.log('filtradas: doacao', d, 'matchBusca', matchBusca, 'matchStatus', matchStatus)
     return matchBusca && matchStatus
   })
+
+  console.log('render: loading', loading)
+  console.log('render: doacoes', doacoes)
+  console.log('render: filtradas', filtradas)
+  console.log('render: filtro', filtro)
+  console.log('render: busca', busca)
 
   if (loading) return <FullPageLoader />
 
@@ -97,7 +112,10 @@ export function ReceptorDoacoes() {
                     ? 'bg-green-600 text-white border-green-700'
                     : 'bg-white text-gray-600 hover:bg-gray-100'
                 )}
-                onClick={() => setFiltro(s)}
+                onClick={() => {
+                  console.log('botao filtro: clicado', s)
+                  setFiltro(s)
+                }}
               >
                 {s === 'TODOS' ? 'Todos' : statusInfo[s].texto}
               </button>
@@ -105,7 +123,10 @@ export function ReceptorDoacoes() {
 
             {filtro !== 'TODOS' && (
               <button
-                onClick={() => setFiltro('TODOS')}
+                onClick={() => {
+                  console.log('botao limpar filtro: clicado')
+                  setFiltro('TODOS')
+                }}
                 className="text-xs px-3 py-1 rounded-sm border border-gray-300 hover:bg-gray-100 text-gray-600"
               >
                 Limpar filtro
@@ -119,7 +140,10 @@ export function ReceptorDoacoes() {
               type="text"
               placeholder="Buscar por produto..."
               value={busca}
-              onChange={(e) => setBusca(e.target.value)}
+              onChange={(e) => {
+                console.log('input busca: alterado', e.target.value)
+                setBusca(e.target.value)
+              }}
               className="pl-10 pr-4 py-2 rounded-sm border border-gray-300 text-xs sm:text-sm w-full"
             />
           </div>
@@ -131,6 +155,7 @@ export function ReceptorDoacoes() {
           <div className="grid gap-3 sm:gap-4">
             {filtradas.map((d) => {
               const status = statusInfo[d.status as keyof typeof statusInfo]
+              console.log('render: exibindo doacao', d)
 
               return (
                 <div
@@ -164,6 +189,7 @@ export function ReceptorDoacoes() {
 
                     <button
                       onClick={() => {
+                        console.log('botao editar: clicado', d)
                         setSelecionada(d)
                         setModalAberto(true)
                       }}
@@ -176,8 +202,14 @@ export function ReceptorDoacoes() {
                     {modalAberto && selecionada && (
                       <EditarDoacao
                         doacao={selecionada}
-                        onClose={() => setModalAberto(false)}
-                        onAtualizado={carregar}
+                        onClose={() => {
+                          console.log('modal editar: fechado')
+                          setModalAberto(false)
+                        }}
+                        onAtualizado={() => {
+                          console.log('modal editar: atualizado')
+                          carregar()
+                        }}
                       />
                     )}
 
